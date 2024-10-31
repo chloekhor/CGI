@@ -1,0 +1,18 @@
+- OTP page @done
+  - redirect to login page if user found that the email is wrong @done
+  - redirect to home page if email right @done
+  - ui references @done
+  - https://curfcode.com/otp-verification-ui-using-bootstrap/ @done
+  - https://in.pinterest.com/pin/loginotp-screen-using-gradient-background--580894051915718627/ @done
+
+
+- Register Page 
+  - password setting
+  - name any limitation?
+
+
+- Login Page
+  - when input and database not match, show error message
+- Forgot password
+  - email input havent register account, not found in database, show error message
+
