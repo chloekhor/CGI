@@ -47,9 +47,9 @@
 
           <!-- Forgot Password Link -->
           <div class="text-right">
-            <a href="/forgot-password" class="text-red-600 hover:text-red-500 text-sm font-medium">
+            <router-link to="/forgot-password" class="text-red-600 hover:text-red-500 text-sm font-medium">
               Forgot your password?
-            </a>
+            </router-link>
           </div>
         </div>
 
@@ -67,7 +67,7 @@
       <!-- Sign Up Link -->
       <div class="text-center mt-4">
         <span class="text-gray-700">Don’t have an account?</span>
-        <a href="/register" class="text-red-600 hover:text-red-500 font-medium">Sign Up</a>
+        <router-link to="/register" class="text-red-600 hover:text-red-500 font-medium">Sign Up</router-link>
       </div>
     </div>
   </div>
