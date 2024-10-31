@@ -94,7 +94,7 @@
       <!-- Log In Link -->
       <div class="text-center mt-4">
         <span class="text-gray-700">Already have an account?</span>
-        <a href="/" class="text-red-600 hover:text-red-500 font-medium">Log In</a>
+        <router-link to="/" class="text-red-600 hover:text-red-500 font-medium">Log In</router-link>
       </div>
     </div>
   </div>

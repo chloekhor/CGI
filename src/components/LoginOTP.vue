@@ -49,9 +49,9 @@
 
       <!-- Login with another account -->
       <div class="text-center mt-4">
-        <a href="/login" class="text-red-600 hover:text-red-500 font-medium">
+        <router-link to="/login" class="text-red-600 hover:text-red-500 font-medium">
           Login with another account
-        </a>
+        </router-link>
       </div>
     </div>
   </div>

@@ -31,7 +31,7 @@
       </form>
 
       <div class="text-center mt-4">
-        <a href="/login" class="text-red-600 hover:text-red-500 font-medium">Back to Login</a>
+        <router-link to="/login" class="text-red-600 hover:text-red-500 font-medium">Back to Login</router-link>
       </div>
     </div>
   </div>
