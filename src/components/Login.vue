@@ -31,7 +31,8 @@
                 v-model="password"
                 id="password"
                 required
-                class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
+                class="appearance-none rounded-lg relative block w-full px-3 py-2 border"
+                :class="passwordError ? 'border-red-500' : 'border-gray-300'"
                 placeholder="••••••••"
               />
               <!-- Show/Hide Password Button -->
@@ -66,7 +67,7 @@
 
       <!-- Sign Up Link -->
       <div class="text-center mt-4">
-        <span class="text-gray-700">Don’t have an account?</span>
+        <span class="text-gray-700">Don’t have an account? </span>
         <router-link to="/register" class="text-red-600 hover:text-red-500 font-medium">Sign Up</router-link>
       </div>
     </div>

@@ -1,13 +1,138 @@
 <template>
-  <div class="text-center">
-    <h1>Welcome to the Home Page</h1>
-    <p>This is the default page.</p>
-    <router-link to="/login" class="text-indigo-500 hover:underline">Go to Login</router-link>
+  <div>
+    <div class="navbar fixed top-0 left-0 w-full bg-white shadow-md flex items-center px-4">
+      <img class="logo h-16" :src="logo" alt="Locked">
+    </div>
+
+    <div class="photo-upload flex justify-center items-center mx-auto border-2 border-red-500 h-60 w-[90%] mt-20 cursor-pointer hover:border-blue-500">
+      <label 
+        for="picture" 
+        class="flex justify-center items-center h-40 w-full rounded-md border border-input bg-background px-3 py-1 
+              text-sm shadow-sm transition-colors placeholder:text-muted-foreground text-center cursor-pointer"
+      >
+        <span id="file-label">Please Enter your image</span>
+      </label>
+      <input 
+        class="hidden" 
+        id="picture" 
+        name="picture" 
+        type="file" 
+        @change="validateFileFormat"
+      
+      >
+    </div>
+
+    <h2 class="set-target text-center text-2xl font-semibold mt-4">Set Your Target</h2>
+
+    <div class="elements flex ml-12 mt-2">
+      <img :src="elements" alt="Locked" class="h-80">
+    
+
+      <div class="slider-preview-container flex justify-between items-start w-[90%] mx-auto mt-4">
+      <div class="flex-col w-1/4">
+        <div v-for="(value, index) in 4" :key="index" class="mb-9">
+          <label :for="'slider' + (index + 1)" class="block mb-1 -mt-2">
+            Value: <span :id="'value' + (index + 1)">0</span>
+          </label>
+          <input
+            type="range"
+            :id="'slider' + (index + 1)"
+            min="0"
+            max="100"
+            v-model.number="sliders[index]" 
+            value="0"
+            class="w-full -mt-4"
+            @input="updateSliderValue(index + 1, $event)"
+          >
+        </div>
+      </div>
+
+      <button type="button" style = "background-color: lightgray;" @click="submitValues">Submit</button>
+
+      <div class="image-preview-container w-1/3">
+        <h4 class="text-lg font-semibold mb-2">Image Preview:</h4>
+        <img 
+          :src="imagePreview" 
+          class="border border-gray-300 max-w-full max-h-60"
+        />
+      </div>
+    </div>
+    </div>
+
   </div>
 </template>
 
+
+
 <script>
-export default {
+import elements from '../images/elements.png';
+import logo from '../images/logo.png';
+
+export default { 
   name: 'Home',
+  data() {
+    return {
+      elements,
+      logo,
+      fileLabel: 'Please Enter your image',  
+      validExtensions: ['jpg', 'jpeg', 'png'], 
+      imagePreview: null,
+      sliders: [0,0,0,0]
+    };
+  },
+  methods: {
+    updateSliderValue(index, event) {
+      document.getElementById(`value${index}`).innerHTML = event.target.value;
+    },
+
+    validateFileFormat(event) {
+      const fileInput = event.target;
+      const file = fileInput.files[0];
+
+      if (file) {
+        const fileName = file.name.toLowerCase();
+        const isValid = this.validExtensions.some(ext => fileName.endsWith(ext));
+        
+        if (isValid) {
+          this.fileLabel = fileName;  
+          this.previewImage(event); 
+        } else {
+          alert("Invalid file format. Please upload a JPG or PNG image.");
+          this.fileLabel = 'Please Enter your image';  
+          fileInput.value = '';  
+        }
+      }
+    },
+    
+    previewImage(event) { //to check if image was submitted
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          console.log('FileReader result:', e.target.result);
+          this.imagePreview = e.target.result; 
+        };
+
+        reader.readAsDataURL(file); 
+      }
+    },
+
+    submitValues() { //to check if slider value is submitted
+      console.log("Slider Values: ", this.sliders);
+
+      this.handleValuesTransfer(this.sliders);
+    },
+
+    handleValuesTransfer(values) {
+      alert(`Transferred values: ${values.join(", ")}`);
+    }
+  }
 };
 </script>
+
+
+<style>
+@import '../assets/homepage-style.css';
+</style>
+
