@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="navbar fixed top-0 left-0 w-full bg-white shadow-md flex items-center px-4">
-      <img class="logo h-16" :src="logo" alt="Locked">
+    <div>
+      <Navbar :logo="logo" />
     </div>
 
     <div class="photo-upload flex justify-center items-center mx-auto border-2 border-red-500 h-60 w-[90%] mt-20 cursor-pointer hover:border-blue-500">
@@ -47,7 +47,13 @@
         </div>
       </div>
 
-      <button type="button" style = "background-color: lightgray;" @click="submitValues">Submit</button>
+      <button 
+        type="button"
+        class="bg-gray-300 hover:bg-red-300 text-black font-medium rounded-full px-4 py-2 transition duration-300"
+        @click="submitValues"
+      >
+        Submit
+      </button>
 
       <div class="image-preview-container w-1/3">
         <h4 class="text-lg font-semibold mb-2">Image Preview:</h4>
@@ -66,14 +72,16 @@
 
 <script>
 import elements from '../images/elements.png';
-import logo from '../images/logo.png';
+import Navbar from '../fragments/Navbar.vue';
 
 export default { 
   name: 'Home',
+  components: {
+    Navbar, 
+  },
   data() {
     return {
       elements,
-      logo,
       fileLabel: 'Please Enter your image',  
       validExtensions: ['jpg', 'jpeg', 'png'], 
       imagePreview: null,
