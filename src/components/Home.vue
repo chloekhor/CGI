@@ -1,16 +1,17 @@
 <template>
   <div>
+
     <div>
       <Navbar :logo="logo" />
     </div>
 
-    <div class="photo-upload flex justify-center items-center mx-auto border-2 border-red-500 h-60 w-[90%] mt-20 cursor-pointer hover:border-blue-500">
+    <div class="photo-upload flex justify-center items-center mx-auto border-2 border-dotted border-gradient-to-b from-red-500 to-orange-500 h-40 w-[90%]">
       <label 
         for="picture" 
         class="flex justify-center items-center h-40 w-full rounded-md border border-input bg-background px-3 py-1 
               text-sm shadow-sm transition-colors placeholder:text-muted-foreground text-center cursor-pointer"
       >
-        <span id="file-label">Please Enter your image</span>
+        <span id="file-label">Upload Your CGI Poster Here</span>
       </label>
       <input 
         class="hidden" 
@@ -20,6 +21,7 @@
         @change="validateFileFormat"
       
       >
+      
     </div>
 
     <h2 class="set-target text-center text-2xl font-semibold mt-4">Set Your Target</h2>
@@ -29,7 +31,7 @@
     
 
       <div class="slider-preview-container flex justify-between items-start w-[90%] mx-auto mt-4">
-      <div class="flex-col w-1/4">
+      <div class="flex-col w-1/4" style = "accent-color: #EF4748;">
         <div v-for="(value, index) in 4" :key="index" class="mb-9">
           <label :for="'slider' + (index + 1)" class="block mb-1 -mt-2">
             Value: <span :id="'value' + (index + 1)">0</span>
@@ -39,21 +41,23 @@
             :id="'slider' + (index + 1)"
             min="0"
             max="100"
-            v-model.number="sliders[index]" 
-            value="0"
-            class="w-full -mt-4"
+            v-model.number="sliders[index]"
+            class="w-full -mt-4 custom-slider"
+            :style="{'--slider-progress': sliders[index] + '%'}"
             @input="updateSliderValue(index + 1, $event)"
           >
+
         </div>
       </div>
 
-      <button 
-        type="button"
-        class="bg-gray-300 hover:bg-red-300 text-black font-medium rounded-full px-4 py-2 transition duration-300"
-        @click="submitValues"
-      >
-        Submit
-      </button>
+      <div>
+        <button @click="fetchData" class="bg-gray-300 hover:bg-red-300 text-black font-medium rounded-full px-4 py-2 transition duration-300">
+          Submit
+        </button>
+
+        <Loader :isLoading="isLoading" />
+
+      </div>
 
       <div class="image-preview-container w-1/3">
         <h4 class="text-lg font-semibold mb-2">Image Preview:</h4>
@@ -73,11 +77,13 @@
 <script>
 import elements from '../images/elements.png';
 import Navbar from '../fragments/Navbar.vue';
+import Loader from '../fragments/loader.vue';
 
 export default { 
   name: 'Home',
   components: {
     Navbar, 
+    Loader
   },
   data() {
     return {
@@ -85,7 +91,8 @@ export default {
       fileLabel: 'Please Enter your image',  
       validExtensions: ['jpg', 'jpeg', 'png'], 
       imagePreview: null,
-      sliders: [0,0,0,0]
+      sliders: [0,0,0,0],
+      isLoading: false
     };
   },
   methods: {
@@ -129,12 +136,22 @@ export default {
     submitValues() { //to check if slider value is submitted
       console.log("Slider Values: ", this.sliders);
 
+      this.isLoading = true; 
+
       this.handleValuesTransfer(this.sliders);
     },
 
     handleValuesTransfer(values) {
       alert(`Transferred values: ${values.join(", ")}`);
+    },
+
+    async fetchData() {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000);
     }
+
   }
 };
 </script>

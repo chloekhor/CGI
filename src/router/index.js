@@ -5,6 +5,7 @@ import Register from '@/components/Register.vue';
 import ForgotPassword from '@/components/ForgotPassword.vue'; 
 import ResetPassword from '@/components/ResetPassword.vue'; 
 import LoginOTP from '@/components/LoginOTP.vue'; 
+import ResultPage from '@/components/ResultPage.vue';
 
 const routes = [
   {
@@ -41,6 +42,11 @@ const routes = [
     name: 'ResetPassword',
     component: ResetPassword, // 默认页面
   },
+  {
+    path: '/home/result-page',
+    name: 'ResultPage',
+    component: ResultPage
+  }
 
 
 ];
