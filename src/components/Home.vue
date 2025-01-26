@@ -51,7 +51,7 @@
       </div>
 
       <div>
-        <button @click="fetchData" class="bg-gray-300 hover:bg-red-300 text-black font-medium rounded-full px-4 py-2 transition duration-300">
+        <button @click="submitValues" class="bg-gray-300 hover:bg-red-300 text-black font-medium rounded-full px-4 py-2 transition duration-300">
           Submit
         </button>
 
@@ -78,12 +78,14 @@
 import elements from '../images/elements.png';
 import Navbar from '../fragments/Navbar.vue';
 import Loader from '../fragments/loader.vue';
+// import Sidebar from '../fragments/sidebar.vue';
 
 export default { 
   name: 'Home',
   components: {
     Navbar, 
-    Loader
+    Loader,
+
   },
   data() {
     return {
@@ -133,24 +135,30 @@ export default {
       }
     },
 
-    submitValues() { //to check if slider value is submitted
+    submitValues() {
       console.log("Slider Values: ", this.sliders);
 
       this.isLoading = true; 
 
-      this.handleValuesTransfer(this.sliders);
+     
+      setTimeout(() => {
+        this.isLoading = false; 
+
+       
+        this.handleValuesTransfer(this.sliders);
+
+        
+        setTimeout(() => {
+          this.$router.push({ path: '/home/result-page' });
+        }, 2000);
+      }, 2000); 
     },
 
     handleValuesTransfer(values) {
       alert(`Transferred values: ${values.join(", ")}`);
     },
 
-    async fetchData() {
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 2000);
-    }
+
 
   }
 };
