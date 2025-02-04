@@ -6,6 +6,10 @@ import ForgotPassword from '@/components/ForgotPassword.vue';
 import ResetPassword from '@/components/ResetPassword.vue'; 
 import LoginOTP from '@/components/LoginOTP.vue'; 
 import ResultPage from '@/components/ResultPage.vue';
+import Profile from '@/components/Profile.vue'
+import History from '@/components/History.vue';
+import Plan from '@/components/Plan.vue';
+
 
 const routes = [
   {
@@ -46,7 +50,28 @@ const routes = [
     path: '/home/result-page',
     name: 'ResultPage',
     component: ResultPage
-  }
+  },
+  {
+    path: '/home/profile',
+    name: 'Profile',
+    component: Profile
+  },
+  {
+    path: '/home/history',
+    name: 'History',
+    component: History
+  },
+  {
+    path: '/home/history',
+    name: 'History',
+    component: History
+  },
+  {
+    path: '/home/plan',
+    name: 'Plan',
+    component: Plan
+  },
+
 
 
 ];

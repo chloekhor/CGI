@@ -138,21 +138,23 @@ export default {
     submitValues() {
       console.log("Slider Values: ", this.sliders);
 
-      this.isLoading = true; 
+      this.isLoading = true;
 
-     
       setTimeout(() => {
         this.isLoading = false; 
 
-       
-        this.handleValuesTransfer(this.sliders);
+        this.handleValuesTransfer(this.sliders); 
 
         
         setTimeout(() => {
-          this.$router.push({ path: '/home/result-page' });
-        }, 2000);
+          this.isLoading = true; 
+          setTimeout(() => {
+            this.$router.push({ path: '/home/result-page' }); 
+          }, 2000); 
+        }, 10); 
       }, 2000); 
     },
+
 
     handleValuesTransfer(values) {
       alert(`Transferred values: ${values.join(", ")}`);

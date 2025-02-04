@@ -3,7 +3,7 @@
         <Navbar :logo="logo" />
     </div>
     <h1>
-        Result Page
+        Plan Page
     </h1>
 </template>
 
