@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <!-- Sidebar -->
-    <div :class="{'w-64': isOpen, 'w-20': !isOpen}" class="bg-gray-800 text-white h-screen transition-width duration-300 ease-in-out">
+    <div :class="{'w-64': isOpen, 'w-20': !isOpen}" class="bg-white-800 shadow-sm text-white h-screen transition-width duration-300 ease-in-out">
       <div class="flex justify-between p-4">
         <h2 v-if="isOpen" class="text-lg font-semibold">Sidebar</h2>
         <button @click="toggleSidebar" class="text-xl">

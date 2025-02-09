@@ -5,33 +5,31 @@
       <Navbar :logo="logo" />
     </div>
 
-    <div class="photo-upload flex justify-center items-center mx-auto border-2 border-dotted border-gradient-to-b from-red-500 to-orange-500 h-40 w-[90%]">
-      <label 
-        for="picture" 
+    <div class="photo-upload shadow-2xl flex justify-center items-center mx-auto border-2 border-dotted border-gradient-to-b from-red-500 to-orange-500 h-40 w-[90%]">
+      <label for="picture" 
         class="flex justify-center items-center h-40 w-full rounded-md border border-input bg-background px-3 py-1 
-              text-sm shadow-sm transition-colors placeholder:text-muted-foreground text-center cursor-pointer"
-      >
-        <span id="file-label">Upload Your CGI Poster Here</span>
+              text-sm shadow-sm transition-colors placeholder:text-muted-foreground text-center cursor-pointer">
+        
+        <p>
+          <button class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600">
+            Upload Your CGI Poster Here
+          </button> <br/>
+
+          Format : JPEG, PNG; Size: 5MB or less
+        </p>
       </label>
-      <input 
-        class="hidden" 
-        id="picture" 
-        name="picture" 
-        type="file" 
-        @change="validateFileFormat"
-      
-      >
+      <input class="hidden" id="picture" name="picture" type="file" @change="validateFileFormat">
       
     </div>
 
     <h2 class="set-target text-center text-2xl font-semibold mt-4">Set Your Target</h2>
 
-    <div class="elements flex ml-12 mt-2">
+    <div class="elements flex ml-12">
       <img :src="elements" alt="Locked" class="h-80">
     
 
-      <div class="slider-preview-container flex justify-between items-start w-[90%] mx-auto mt-4">
-      <div class="flex-col w-1/4" style = "accent-color: #EF4748;">
+      <div class="slider-preview-container flex justify-between items-start w-[90%] mx-auto">
+      <div class="flex-col w-1/4">
         <div v-for="(value, index) in 4" :key="index" class="mb-9">
           <label :for="'slider' + (index + 1)" class="block mb-1 -mt-2">
             Value: <span :id="'value' + (index + 1)">0</span>
@@ -51,9 +49,11 @@
       </div>
 
       <div>
-        <button @click="submitValues" class="bg-gray-300 hover:bg-red-300 text-black font-medium rounded-full px-4 py-2 transition duration-300">
-          Submit
+        <button @click="submitValues" class="relative w-20 h-20 bg-gray-300 text-black font-medium rounded-full transition duration-300 overflow-hidden group mt-4 -ml-2">
+          <span class="relative z-10">Submit</span>
+          <span class="absolute inset-0 bg-[#FF7823] scale-0 group-hover:scale-100 cursor-pointer transition-transform duration-300 origin-center rounded-full"></span>
         </button>
+
 
         <Loader :isLoading="isLoading" />
 
@@ -109,17 +109,27 @@ export default {
       if (file) {
         const fileName = file.name.toLowerCase();
         const isValid = this.validExtensions.some(ext => fileName.endsWith(ext));
-        
-        if (isValid) {
-          this.fileLabel = fileName;  
-          this.previewImage(event); 
-        } else {
+        const maxSize = 5 * 1024 * 1024; 
+
+        if (!isValid) {
           alert("Invalid file format. Please upload a JPG or PNG image.");
-          this.fileLabel = 'Please Enter your image';  
-          fileInput.value = '';  
+          this.fileLabel = "Please Enter your image";
+          fileInput.value = "";
+          return;
         }
+
+        if (file.size > maxSize) {
+          alert("File size exceeds 5MB. Please upload a smaller file.");
+          this.fileLabel = "Please Enter your image";
+          fileInput.value = "";
+          return;
+        }
+
+        this.fileLabel = fileName;
+        this.previewImage(event);
       }
     },
+
     
     previewImage(event) { //to check if image was submitted
       const file = event.target.files[0];
