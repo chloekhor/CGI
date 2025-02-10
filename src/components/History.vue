@@ -1,22 +1,26 @@
 <template>
     <div class="container mx-auto p-6">
         <Navbar :logo="logo" class="bg-primary text-white py-4" />
-        <div class="bg-white rounded-lg shadow-md p-4">
-            <div class="max-h-[400px] border border-gray-300">
-                <h1>History</h1>
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="border border-gray-300">
+                <!-- <h1>History</h1> -->
                 <table id="myTable" class="display">
                     <thead>
-                        <tr>
+                        <tr style = "background-color: #FF7823">
+                            <th></th>
                             <th>Date</th>
                             <th>Target</th>
                             <th>Result</th>
+                            <th>Suggestion</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in items" :key="index">
+                            <td><input type="checkbox" name="select"></td>
                             <td>{{ item.date }}</td>
                             <td>{{ item.target }}</td>
+                            <td>{{ item.suggest }}</td>
                             <td>{{ item.result }}</td>
                             <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -43,6 +47,7 @@
                     <div class="mt-4">
                         <p><strong>Date:</strong> {{ selectedItem?.date }}</p>
                         <p><strong>Target:</strong> {{ selectedItem?.target }}</p>
+                        <p><strong>Suggestion:</strong> {{ selectedItem?.suggest }}</p>
                         <p><strong>Result:</strong> {{ selectedItem?.result }}</p>
                     </div>
 
@@ -73,6 +78,7 @@ export default {
         const items = ref(Array.from({ length: 30 }, (_, i) => ({
             date: `2024-02-${i + 1}`,
             target: Math.floor(Math.random() * 100),
+            suggest: Math.floor(Math.random() * 100),
             result: Math.floor(Math.random() * 100),
         })));
 
@@ -95,6 +101,7 @@ export default {
                 dataTable = $('#myTable').DataTable({
                     stateSave: true,
                     responsive: true,
+                    columnDefs: [{ width: 10, targets: 0 }],
                     pagingType: 'full_numbers',
                     language: {
                         search: '',
@@ -104,8 +111,7 @@ export default {
                             next: '&raquo;'
                         }
                     },
-                    // dom: "lfrtip",
-                    autoWidth: false,
+                    autoWidth: false, 
                     scrollY: '300px',
                     scrollCollapse: true,
                     pageLength: 5,
@@ -114,17 +120,18 @@ export default {
                         [5, 10, 20, 30, 'All']
                     ],
                     initComplete: function () {
-
                         let searchInput = $(this.api().table().container()).find('.dataTables_filter input');
                         searchInput.addClass('custom-search-input');
                     }
                 });
+
+                
+                window.addEventListener("resize", () => {
+                    dataTable.columns.adjust();
+                });
             });
         });
 
-
-
-        // Destroy DataTable before unmounting
         onBeforeUnmount(() => {
             if (dataTable) {
                 dataTable.destroy();
@@ -142,6 +149,9 @@ export default {
 };
 </script>
 
-<style scoped>
-@import 'vue3-easy-data-table/dist/style.css';
+<style>
+    @import 'vue3-easy-data-table/dist/style.css';
+
+    @import '../assets/homepage-style.css';
+
 </style>

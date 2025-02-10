@@ -5,18 +5,23 @@
       <Navbar :logo="logo" />
     </div>
 
+    <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-red-100 text-red-600 rounded-md">
+        {{ errorMessage }}
+    </div>
+
     <div class="photo-upload shadow-2xl flex justify-center items-center mx-auto border-2 border-dotted border-gradient-to-b from-red-500 to-orange-500 h-40 w-[90%]">
       <label for="picture" 
         class="flex justify-center items-center h-40 w-full rounded-md border border-input bg-background px-3 py-1 
               text-sm shadow-sm transition-colors placeholder:text-muted-foreground text-center cursor-pointer">
         
-        <p>
-          <button class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600">
-            Upload Your CGI Poster Here
-          </button> <br/>
+      <p class="bg-orange-500 text-white font-bold py-6 px-10 text-4xl md:text-3xl lg:text-3xl rounded-xl hover:bg-orange-600 w-full text-center max-w-[600px]">
+        Upload Your CGI Poster Here
+        <br/>
+        <span class="text-xl">Format: JPEG, PNG; Size: 5MB or less</span>
+      </p>
 
-          Format : JPEG, PNG; Size: 5MB or less
-        </p>
+
+
       </label>
       <input class="hidden" id="picture" name="picture" type="file" @change="validateFileFormat">
       
@@ -49,11 +54,11 @@
       </div>
 
       <div>
-        <button @click="submitValues" class="relative w-20 h-20 bg-gray-300 text-black font-medium rounded-full transition duration-300 overflow-hidden group mt-4 -ml-2">
+        <button @click="submitValues" 
+          class="relative w-20 h-20 bg-gray-300 text-black font-medium rounded-full transition duration-300 overflow-hidden group mt-4 -ml-2 flex justify-center items-center z-10">
           <span class="relative z-10">Submit</span>
           <span class="absolute inset-0 bg-[#FF7823] scale-0 group-hover:scale-100 cursor-pointer transition-transform duration-300 origin-center rounded-full"></span>
         </button>
-
 
         <Loader :isLoading="isLoading" />
 
@@ -68,6 +73,19 @@
       </div>
     </div>
     </div>
+
+    <!-- <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p>
+    <p>test</p> -->
 
   </div>
 </template>
@@ -94,7 +112,8 @@ export default {
       validExtensions: ['jpg', 'jpeg', 'png'], 
       imagePreview: null,
       sliders: [0,0,0,0],
-      isLoading: false
+      isLoading: false,
+      errorMessage: ''
     };
   },
   methods: {
@@ -112,14 +131,18 @@ export default {
         const maxSize = 5 * 1024 * 1024; 
 
         if (!isValid) {
-          alert("Invalid file format. Please upload a JPG or PNG image.");
+          this.errorMessage = 'Invalid file format. Please upload a JPG or PNG image.';
+          // alert("Invalid file format. Please upload a JPG or PNG image.");
           this.fileLabel = "Please Enter your image";
           fileInput.value = "";
           return;
+        } else {
+          this.errorMessage = '';
         }
 
         if (file.size > maxSize) {
-          alert("File size exceeds 5MB. Please upload a smaller file.");
+          this.errorMessage = 'File size exceeds 5MB. Please upload a smaller file.';
+          // alert("File size exceeds 5MB. Please upload a smaller file.");
           this.fileLabel = "Please Enter your image";
           fileInput.value = "";
           return;

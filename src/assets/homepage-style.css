@@ -94,3 +94,29 @@ body {
 .blur {
     filter: blur(4px); 
 }
+
+/* DataTable Design */
+
+.dt-length {
+    margin-left: 10px;
+}
+
+.dt-info {
+    margin-left: 10px;
+}
+
+.dt-input {
+    margin-right: 10px;
+}
+
+.dataTable td, .dataTable th {
+    border-right: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.dataTable td:last-child, 
+.dataTable th:last-child {
+    border-right: none;
+}
