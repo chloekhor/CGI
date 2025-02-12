@@ -90,7 +90,7 @@
             
 
             <div class="flex justify-center mt-4">
-                <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-green-600 w-full max-w-[600px] text-center">
+                <button type="submit" class="bg-orange-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-green-600 w-full max-w-[600px] text-center">
                     Save
                 </button>
                 <button @click="toggleEdit" type="button" class="ml-4 bg-gray-400 text-white font-bold py-2 px-4 rounded-xl hover:bg-gray-500 w-full max-w-[600px] text-center">

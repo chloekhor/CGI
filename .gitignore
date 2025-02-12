@@ -1,9 +1,11 @@
+# macOS system files
 .DS_Store
-node_modules
-/dist
 
+# Node.js dependencies
+node_modules/
+dist/
 
-# local env files
+# Local env files
 .env.local
 .env.*.local
 
@@ -14,11 +16,25 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Editor directories and files
-.idea
-.vscode
+.idea/
+.vscode/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-node_modules
+
+# Ignore Python cache and compiled files
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore Django migrations (optional)
+*.sqlite3
+db.sqlite3
+migrations/
