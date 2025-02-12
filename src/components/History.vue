@@ -74,6 +74,7 @@ export default {
     name: 'Result',
     components: { Navbar, Dialog, DialogTitle, TransitionRoot },
 
+    
     setup() {
         const items = ref(Array.from({ length: 30 }, (_, i) => ({
             date: `2024-02-${i + 1}`,
