@@ -12,16 +12,19 @@
                             <th>Target</th>
                             <th>Result</th>
                             <th>Suggestion</th>
+                       
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in items" :key="index">
+                        <tr v-for="item in history" :key="item.id">
                             <td><input type="checkbox" name="select"></td>
-                            <td>{{ item.date }}</td>
-                            <td>{{ item.target }}</td>
-                            <td>{{ item.suggest }}</td>
-                            <td>{{ item.result }}</td>
+                            <td>{{ item.date || '-' }}</td>
+                            <td>{{ item.target || 'N/A' }}</td>
+                            <td>{{ item.result ?? 'No Result' }}</td>
+                            <td>{{ item.suggestion ?? 'No Suggestion' }}</td>
+                          
+                            
                             <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-eye text-blue-500 cursor-pointer hover:text-blue-700"
@@ -47,7 +50,7 @@
                     <div class="mt-4">
                         <p><strong>Date:</strong> {{ selectedItem?.date }}</p>
                         <p><strong>Target:</strong> {{ selectedItem?.target }}</p>
-                        <p><strong>Suggestion:</strong> {{ selectedItem?.suggest }}</p>
+                        <p><strong>Suggestion:</strong> {{ selectedItem?.suggestion }}</p>
                         <p><strong>Result:</strong> {{ selectedItem?.result }}</p>
                     </div>
 
@@ -69,19 +72,23 @@ import { Dialog, DialogTitle, TransitionRoot } from '@headlessui/vue';
 import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import 'datatables.net';
+import api from '@/api';
 
 export default {
     name: 'Result',
     components: { Navbar, Dialog, DialogTitle, TransitionRoot },
+    
+    data() {
+        return {
+            history: []
+        };
+    },
+
+    created() {
+        this.fetchHistory();
+    },
 
     setup() {
-        const items = ref(Array.from({ length: 30 }, (_, i) => ({
-            date: `2024-02-${i + 1}`,
-            target: Math.floor(Math.random() * 100),
-            suggest: Math.floor(Math.random() * 100),
-            result: Math.floor(Math.random() * 100),
-        })));
-
         const isModalOpen = ref(false);
         const selectedItem = ref(null);
         let dataTable = null;
@@ -96,22 +103,17 @@ export default {
             selectedItem.value = null;
         };
 
-        onMounted(() => {
+        const initDataTable = () => {
             nextTick(() => {
-                dataTable = $('#myTable').DataTable({
+                if ($.fn.DataTable.isDataTable('#myTable')) {
+                    $('#myTable').DataTable().destroy();
+                }
+                $('#myTable').DataTable({
                     stateSave: true,
                     responsive: true,
                     columnDefs: [{ width: 10, targets: 0 }],
                     pagingType: 'full_numbers',
-                    language: {
-                        search: '',
-                        searchPlaceholder: "Search Here...",
-                        paginate: {
-                            previous: '&laquo;',
-                            next: '&raquo;'
-                        }
-                    },
-                    autoWidth: false, 
+                    autoWidth: false,
                     scrollY: '300px',
                     scrollCollapse: true,
                     pageLength: 5,
@@ -119,35 +121,66 @@ export default {
                         [5, 10, 20, 30, -1],
                         [5, 10, 20, 30, 'All']
                     ],
-                    initComplete: function () {
-                        let searchInput = $(this.api().table().container()).find('.dataTables_filter input');
-                        searchInput.addClass('custom-search-input');
+                    language: {
+                        search: '',
+                        searchPlaceholder: "Search Here...",
+                        paginate: {
+                            previous: '&laquo;',
+                            next: '&raquo;'
+                        }
                     }
                 });
 
-                
                 window.addEventListener("resize", () => {
-                    dataTable.columns.adjust();
+                    $('#myTable').DataTable().columns.adjust();
                 });
             });
-        });
+        };
 
-        onBeforeUnmount(() => {
+        onMounted(() => {
             if (dataTable) {
                 dataTable.destroy();
             }
         });
 
+        onBeforeUnmount(() => {
+            if ($.fn.DataTable.isDataTable('#myTable')) {
+                $('#myTable').DataTable().destroy();
+            }
+        });
+
         return {
-            items,
             isModalOpen,
             selectedItem,
             openModal,
             closeModal,
+            initDataTable
         };
     },
+
+    methods: {
+        fetchHistory() {
+            api.get('history/')
+                .then(response => {
+                    this.history = response.data.map(item => ({
+                        id: item.id || 0,
+                        date: item.date || '-',
+                        target: item.target || 'N/A',
+                        result: item.result ?? 'No Result',
+                        suggestion: item.suggestion ?? 'No Suggestion',
+                        photo: item.photo ?? 'Error Loading Photo'
+                    }));
+
+                    this.$nextTick(() => this.initDataTable());
+                })
+                .catch(error => {
+                    console.error('Error Fetching History: ', error);
+                });
+        }
+    }
 };
 </script>
+
 
 <style>
     @import 'vue3-easy-data-table/dist/style.css';
