@@ -12,29 +12,31 @@
 
 
         <div id="pfp"></div>
-        <div id="userName"></div>
+        <div style = "text-align: center" v-for="item in profile" :key="item.id">{{ item.username }}</div>
 
         <!-- Show Current Data -->
-        <form v-if="!isEditing" class="border border-black p-4 mt-4 rounded-md w-100">
-            <label for="uname" class="block font-semibold">Username:</label>
-            <div id="uname" name="uname" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
-                {{ username }}
-            </div>
+        <form v-for="item in profile" :key="item.id" class="border border-black p-4 mt-4 rounded-md w-100">
+            <div v-if="!isEditing">
+                <label for="uname" class="block font-semibold">Username:</label>
+                <div id="uname" name="uname" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
+                    {{ item.username }}
+                </div>
 
-            <label for="email" class="block font-semibold">Email:</label>
-            <div id="email" name="email" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
-                {{ email }}
-            </div>
+                <label for="email" class="block font-semibold">Email:</label>
+                <div id="email" name="email" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
+                    {{ item.email }}
+                </div>
 
-            <label for="password" class="block font-semibold">Password:</label>
-            <div id="password" name="password" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
-                ••••••••
-            </div>
+                <label for="password" class="block font-semibold">Password:</label>
+                <div id="password" name="password" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
+                    ••••••••
+                </div>
 
-            <div class="flex justify-center">
-                <button @click="toggleEdit" type="button" class="bg-orange-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-orange-600 w-full max-w-[600px] text-center">
-                    Edit
-                </button>
+                <div class="flex justify-center">
+                    <button @click="toggleEdit" type="button" class="bg-orange-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-orange-600 w-full max-w-[600px] text-center">
+                        Edit
+                    </button>
+                </div>
             </div>
         </form>
 
@@ -105,6 +107,7 @@
 <script>
 import Navbar from '../fragments/Navbar.vue';
 import Loader from '../fragments/loader.vue';
+import api from '@/api';
 
 
 export default {
@@ -115,11 +118,12 @@ export default {
     },
     data() {
         return {
+            profile: [],
             isEditing: false,
-            username: "API...Username",
-            email: "API...Email",
-            password: "",
-            confirmPassword: "",
+            // username: "API...Username",
+            // email: "API...Email",
+            // password: "",
+            // confirmPassword: "",
             isLoading: false,
             showPassword: false,
             showConfirmPassword: false,
@@ -127,6 +131,11 @@ export default {
             successMessage: ''
         };
     },
+
+    created() {
+        this.fetchProfile();
+    },
+
     methods: {
         toggleEdit() {
             this.isEditing = !this.isEditing;
@@ -158,9 +167,25 @@ export default {
 
                 this.isEditing = false; // Switch back to view mode
                 this.isLoading = false;
-            }, 2000);
+            }, 2000);   
+        },
+        fetchProfile() {
+            api.get('profile/')
+                .then(response => {
+                    this.profile = response.data.map(item => ({
+                        id: item.id || '-',
+                        username: item.username || '-',
+                        email: item.email || 'N/A',
+                        password: item.password ?? 'No Result',
 
-            
+                        
+                    }));
+
+                    // this.$nextTick(() => this.initDataTable());
+                })
+                .catch(error => {
+                    console.error('Error Fetching History: ', error);
+                });
         }
     }
 }
