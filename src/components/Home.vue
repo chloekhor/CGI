@@ -14,14 +14,11 @@
         class="flex justify-center items-center h-40 w-full rounded-md border border-input bg-background px-3 py-1 
               text-sm shadow-sm transition-colors placeholder:text-muted-foreground text-center cursor-pointer">
         
-      <p class="bg-orange-500 text-white font-bold py-6 px-10 text-4xl md:text-3xl lg:text-3xl rounded-xl hover:bg-orange-600 w-full text-center max-w-[600px]">
-        Upload Your CGI Poster Here
-        <br/>
-        <span class="text-xl">Format: JPEG, PNG; Size: 5MB or less</span>
-      </p>
-
-
-
+        <p class="bg-orange-500 text-white font-bold py-6 px-10 text-4xl md:text-3xl lg:text-3xl rounded-xl hover:bg-orange-600 w-full text-center max-w-[600px]">
+          Upload Your CGI Poster Here
+          <br/>
+          <span class="text-xl">Format: JPEG, PNG; Size: 5MB or less</span>
+        </p>
       </label>
       <input class="hidden" id="picture" name="picture" type="file" @change="validateFileFormat">
       
@@ -73,20 +70,6 @@
       </div>
     </div>
     </div>
-
-    <!-- <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p>
-    <p>test</p> -->
-
   </div>
 </template>
 
@@ -114,7 +97,9 @@ export default {
       imagePreview: null,
       sliders: [0,0,0,0],
       isLoading: false,
-      errorMessage: ''
+      errorMessage: '',
+      selectedFile: null,
+      
     };
   },
   methods: {
@@ -133,7 +118,6 @@ export default {
 
         if (!isValid) {
           this.errorMessage = 'Invalid file format. Please upload a JPG or PNG image.';
-          // alert("Invalid file format. Please upload a JPG or PNG image.");
           this.fileLabel = "Please Enter your image";
           fileInput.value = "";
           return;
@@ -143,49 +127,23 @@ export default {
 
         if (file.size > maxSize) {
           this.errorMessage = 'File size exceeds 5MB. Please upload a smaller file.';
-          // alert("File size exceeds 5MB. Please upload a smaller file.");
           this.fileLabel = "Please Enter your image";
           fileInput.value = "";
           return;
         }
 
         this.fileLabel = fileName;
+        this.selectedFile = file;
+
         this.previewImage(event);
-        this.uploadFile(event);
         
-      }
-    },
-
-
-    async uploadFile(event) {
-      const file = event.target.files[0];
-      if (!file) {
-        alert('Please select a file first.');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('photo', file); // Make sure the key matches the Django backend ('photo')
-
-      try {
-        const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data', // Important for file uploads
-          },
-        });
-
-        if (response.data.error) {
-          console.error("Error:", response.data.error);
-        } else {
-          console.log("Success:", response.data.message, "Evaluation:", response.data.evaluation);
-        }
-      } catch (error) {
-        console.error('Error uploading file:', error);
+        
       }
     },
     
     previewImage(event) { //to check if image was submitted
       const file = event.target.files[0];
+
       if (file) {
         const reader = new FileReader();
 
@@ -198,33 +156,36 @@ export default {
       }
     },
 
-    submitValues() {
-    //   const file = event.target.files[0];
-
-    //   if (file) {
-    //     // Create FormData and append the file
-    //     const formData = new FormData();
-    //     formData.append('image', file);
-
-    //     // Send the formData using fetch API
-    //     fetch('/upload/', {
-    //       method: 'POST',
-    //       body: formData,
-    //     })
-    //       .then(response => response.json())
-    //       .then(data => {
-    //         if(data.error) {
-    //           console.error("Error:", data.error);
-    //         } else {
-    //           console.log("Success:", data.message);
-    //           // You can now process the response further, e.g., displaying the evaluation results.
-    //         }
-    //       })
-    //       .catch(error => console.error('Error:', error));
-    //   }
-      console.log("Slider Values: ", this.sliders);
-
+    async submitValues() {
       this.isLoading = true;
+      const file = this.selectedFile;
+      if (!file) {
+        alert('Please select a file first.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('photo', file); 
+
+      try {
+        this.loading = false;
+        const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (response.data.error) {
+          
+          console.error("Error:", response.data.error);
+        } else {
+          this.Loading = true;
+          console.log("Success:", response.data.message, "Evaluation:", response.data.evaluation);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+      console.log("Slider Values: ", this.sliders);
 
       setTimeout(() => {
         this.isLoading = false; 
@@ -245,8 +206,6 @@ export default {
     handleValuesTransfer(values) {
       alert(`Transferred values: ${values.join(", ")}`);
     },
-
-
 
   }
 };
