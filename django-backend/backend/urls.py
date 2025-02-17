@@ -18,4 +18,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path('readApi/', include('readApi.urls')),
+    path('aiModel/', include('aiModel.urls')),
 ]

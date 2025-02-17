@@ -96,6 +96,7 @@
 import elements from '../images/elements.png';
 import Navbar from '../fragments/Navbar.vue';
 import Loader from '../fragments/loader.vue';
+import axios from 'axios';
 // import Sidebar from '../fragments/sidebar.vue';
 
 export default { 
@@ -150,9 +151,38 @@ export default {
 
         this.fileLabel = fileName;
         this.previewImage(event);
+        this.uploadFile(event);
+        
       }
     },
 
+
+    async uploadFile(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        alert('Please select a file first.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('photo', file); // Make sure the key matches the Django backend ('photo')
+
+      try {
+        const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Important for file uploads
+          },
+        });
+
+        if (response.data.error) {
+          console.error("Error:", response.data.error);
+        } else {
+          console.log("Success:", response.data.message, "Evaluation:", response.data.evaluation);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    },
     
     previewImage(event) { //to check if image was submitted
       const file = event.target.files[0];
@@ -169,6 +199,29 @@ export default {
     },
 
     submitValues() {
+    //   const file = event.target.files[0];
+
+    //   if (file) {
+    //     // Create FormData and append the file
+    //     const formData = new FormData();
+    //     formData.append('image', file);
+
+    //     // Send the formData using fetch API
+    //     fetch('/upload/', {
+    //       method: 'POST',
+    //       body: formData,
+    //     })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         if(data.error) {
+    //           console.error("Error:", data.error);
+    //         } else {
+    //           console.log("Success:", data.message);
+    //           // You can now process the response further, e.g., displaying the evaluation results.
+    //         }
+    //       })
+    //       .catch(error => console.error('Error:', error));
+    //   }
       console.log("Slider Values: ", this.sliders);
 
       this.isLoading = true;
