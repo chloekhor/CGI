@@ -28,23 +28,24 @@
       <img :src="elements" alt="Locked" class="h-80">
 
       <div class="slider-preview-container flex justify-between items-start w-[90%] mx-auto">
-        <div class="flex-col w-1/4">
-          <div v-for="(value, index) in 4" :key="index" class="mb-9">
-            <label :for="'slider' + (index + 1)" class="block mb-1 -mt-2">
-              Value: <span :id="'value' + (index + 1)">0</span>
-            </label>
-            <input
-              type="range"
-              :id="'slider' + (index + 1)"
-              min="0"
-              max="100"
-              v-model.number="sliders[index]"
-              class="w-full -mt-4 custom-slider"
-              :style="{'--slider-progress': sliders[index] + '%'}"
-              @input="updateSliderValue(index + 1, $event)"
-            >
-          </div>
+      <div class="flex-col w-1/4">
+        <div v-for="(value, index) in 4" :key="index" class="mb-9">
+          <label :for="'slider' + (index + 1)" class="block mb-1 -mt-2">
+            Value: <span :id="'value' + (index + 1)">0</span>
+          </label>
+          <input
+            type="range"
+            :id="'slider' + (index + 1)"
+            min="0"
+            max="10"
+            v-model.number="sliders[index]"
+            class="w-full -mt-4 custom-slider"
+            :style="{'--slider-progress': (sliders[index] * 10) + '%'}"
+            @input="updateSliderValue(index + 1, $event)"
+          >
+
         </div>
+      </div>
 
         <div>
           <button 
@@ -184,7 +185,6 @@ export default {
         reader.readAsDataURL(file); 
       }
     },
-
     async submitValues() {
       this.isLoading = true;
       if (!this.selectedFile) {
@@ -213,37 +213,41 @@ export default {
     async beginAnalyze() {
       const formData = new FormData();
       formData.append('photo', this.selectedFile); 
+      formData.append('target', JSON.stringify(this.sliders));
 
       try {
-        this.isLoading = true;
         const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         if (response.data.error) {
           console.error("Error:", response.data.error);
-        } else {
-          console.log("Success:", response.data.message, "Evaluation:", response.data.evaluation);
+          this.isLoading = false;
+          return;
         }
+
+        const evaluationResult = response.data.evaluation;
+        const recommendation = response.data.recommendation; 
+        const photoUrl = response.data.photo_url;
+
+        this.$router.push({
+          path: '/home/result-page',
+          query: { 
+            result: JSON.stringify(evaluationResult),
+            target: JSON.stringify(this.sliders), 
+            recommendation: recommendation,
+            photoUrl: photoUrl
+          }
+        });
+
       } catch (error) {
         console.error('Error uploading file:', error);
       }
-      
-      console.log("Slider Values: ", this.sliders);
 
       // Simulate some delays for further processing and navigation
       setTimeout(() => {
-        this.isLoading = false; 
-        // Optionally, you can handle value transfer or other logic here
-        setTimeout(() => {
-          this.isLoading = true; 
-          setTimeout(() => {
-            this.$router.push({ path: '/home/result-page' }); 
-          }, 2000); 
-        }, 10); 
-      }, 2000); 
+        this.isLoading = false;
+      }, 1000);
     },
   }
 };

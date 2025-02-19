@@ -1,0 +1,82 @@
+/* resultpage-style.css */
+
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.suggestion-container {
+  width: 45%;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.result-container {
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.matrix-wrapper {
+  position: relative;
+  width: 400px;
+  margin: auto;
+}
+
+.matrix-container {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: auto;
+}
+
+.axis-label {
+  position: absolute;
+  font-weight: bold;
+}
+
+.axis-label.top {
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.axis-label.left {
+  left: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+}
+
+.axis-label.right {
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+}
+
+.axis-label.bottom {
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.black-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.red-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
