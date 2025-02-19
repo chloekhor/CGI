@@ -26,16 +26,20 @@ def get_gemini_recommendation(evaluation_result, target_values):
             else:
                 improvement_suggestions.append(f"✅ **{dimension}（{result}/{target}）: Exceeds Target!** Consider balancing other factors.")
 
+        # Pre-compute the joined strings to avoid using backslashes in f-string expressions
+        improvement_text = "\n".join(improvement_suggestions)
+        adjustment_text = "\n".join(adjustment_suggestions) if adjustment_suggestions else "All key aspects meet or exceed the target. No major adjustments needed."
+
         prompt = f"""
         The user uploaded a food advertisement poster and set the target values:
         - **Target Values**: {target_values}
         - **AI Evaluation Scores**: {evaluation_result}
 
         **🎯 Comparative Analysis**
-        {'\n'.join(improvement_suggestions)}
+        {improvement_text}
 
         **Suggested Adjustments:**
-        {'\n'.join(adjustment_suggestions) if adjustment_suggestions else "All key aspects meet or exceed the target. No major adjustments needed."}
+        {adjustment_text}
 
         ### **Required Response Format**
         You must structure your response using the following format:
@@ -70,7 +74,6 @@ def get_gemini_recommendation(evaluation_result, target_values):
         ### **Summary**
         Provide a **summary paragraph** summarizing the key improvement areas based on the above analysis. The summary should be **concise and action-oriented**, highlighting the most important recommendations that will **enhance the advertisement’s effectiveness**. Avoid bullet points—write a structured paragraph.
         ---
-
         Ensure the response **strictly follows** this format.
         """
 

@@ -63,10 +63,14 @@
             </Dialog>
         </TransitionRoot>
     </div>
+    <Loader :isLoading="isLoading" />
+
 </template>
 
 <script>
 import Navbar from '../fragments/Navbar.vue';
+import Loader from '../fragments/loader.vue';
+
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { Dialog, DialogTitle, TransitionRoot } from '@headlessui/vue';
 import $ from 'jquery';
@@ -76,11 +80,12 @@ import api from '@/api';
 
 export default {
     name: 'Result',
-    components: { Navbar, Dialog, DialogTitle, TransitionRoot },
+    components: { Navbar, Dialog, DialogTitle, TransitionRoot, Loader },
     
     data() {
         return {
-            history: []
+            history: [],
+            isLoading: false,
         };
     },
 
@@ -160,6 +165,7 @@ export default {
 
     methods: {
         fetchHistory() {
+            this.isLoading = true;
             api.get('history/')
                 .then(response => {
                     this.history = response.data.map(item => ({
@@ -170,7 +176,7 @@ export default {
                         suggestion: item.suggestion ?? 'No Suggestion',
                         photo: item.photo ?? 'Error Loading Photo'
                     }));
-
+                    this.isLoading = false;
                     this.$nextTick(() => this.initDataTable());
                 })
                 .catch(error => {
