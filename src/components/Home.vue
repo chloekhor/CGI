@@ -40,10 +40,10 @@
             type="range"
             :id="'slider' + (index + 1)"
             min="0"
-            max="100"
+            max="10"
             v-model.number="sliders[index]"
             class="w-full -mt-4 custom-slider"
-            :style="{'--slider-progress': sliders[index] + '%'}"
+            :style="{'--slider-progress': (sliders[index] * 10) + '%'}"
             @input="updateSliderValue(index + 1, $event)"
           >
 
@@ -155,53 +155,52 @@ export default {
         reader.readAsDataURL(file); 
       }
     },
-
     async submitValues() {
-      this.isLoading = true;
-      const file = this.selectedFile;
-      if (!file) {
+      this.isLoading = true; 
+
+      if (!this.selectedFile) {
         alert('Please select a file first.');
+        this.isLoading = false;
         return;
       }
 
       const formData = new FormData();
-      formData.append('photo', file); 
+      formData.append('photo', this.selectedFile); 
+      formData.append('target', JSON.stringify(this.sliders));
 
       try {
-        this.loading = false;
         const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         if (response.data.error) {
-          
           console.error("Error:", response.data.error);
-        } else {
-          this.Loading = true;
-          console.log("Success:", response.data.message, "Evaluation:", response.data.evaluation);
+          this.isLoading = false;
+          return;
         }
+
+        const evaluationResult = response.data.evaluation;
+        const recommendation = response.data.recommendation; 
+        const photoUrl = response.data.photo_url;
+
+        this.$router.push({
+          path: '/home/result-page',
+          query: { 
+            result: JSON.stringify(evaluationResult),
+            target: JSON.stringify(this.sliders), 
+            recommendation: recommendation,
+            photoUrl: photoUrl
+          }
+        });
+
       } catch (error) {
         console.error('Error uploading file:', error);
       }
-      console.log("Slider Values: ", this.sliders);
 
       setTimeout(() => {
-        this.isLoading = false; 
-
-        this.handleValuesTransfer(this.sliders); 
-
-        
-        setTimeout(() => {
-          this.isLoading = true; 
-          setTimeout(() => {
-            this.$router.push({ path: '/home/result-page' }); 
-          }, 2000); 
-        }, 10); 
-      }, 2000); 
+        this.isLoading = false;
+      }, 1000);
     },
-
 
     handleValuesTransfer(values) {
       alert(`Transferred values: ${values.join(", ")}`);
