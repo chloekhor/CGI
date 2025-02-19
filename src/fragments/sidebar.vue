@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       logo,
-      isOpen: true, // For Sidebar open/close state
+      isOpen: false, // For Sidebar open/close state
       isLoading: false
     };
   },

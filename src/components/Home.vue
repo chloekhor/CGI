@@ -216,6 +216,7 @@ export default {
       formData.append('target', JSON.stringify(this.sliders));
 
       try {
+        this.isLoading = true;
         const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
