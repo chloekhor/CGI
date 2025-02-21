@@ -10,7 +10,7 @@ export function drawMatrix(canvasRef, targetValues, evaluationResult) {
 
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const scale = 19.5; 
+    const scale = 17; 
 
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;

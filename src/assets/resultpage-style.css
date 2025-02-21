@@ -23,14 +23,14 @@
 
 .matrix-wrapper {
   position: relative;
-  width: 400px;
+  width: 350px;
   margin: auto;
 }
 
 .matrix-container {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
   margin: auto;
 }
 
@@ -52,8 +52,9 @@
   writing-mode: vertical-rl;
 }
 
+
 .axis-label.right {
-  right: -25px;
+  right: -35px;
   top: 50%;
   transform: translateY(-50%);
   writing-mode: vertical-rl;

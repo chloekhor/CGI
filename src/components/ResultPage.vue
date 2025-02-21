@@ -15,7 +15,7 @@
           <div class="axis-label bottom">Entertainment</div>
 
           <div class="matrix-container">
-            <canvas ref="matrixCanvas" width="400" height="400"></canvas>
+            <canvas ref="matrixCanvas" width="350" height="350"></canvas>
           </div>
         </div>
 
