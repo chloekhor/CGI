@@ -10,13 +10,15 @@
             {{ successMessage }}
         </div>
 
+        <div v-if="!isEditing">
+            <div id="pfp"></div>
+            <div style = "text-align: center" v-for="item in profile" :key="item.id">{{ item.username }}</div>
+        </div>
 
-        <div id="pfp"></div>
-        <div style = "text-align: center" v-for="item in profile" :key="item.id">{{ item.username }}</div>
 
         <!-- Show Current Data -->
-        <form v-for="item in profile" :key="item.id" class="border border-black p-4 mt-4 rounded-md w-100">
-            <div v-if="!isEditing">
+        <form v-for="item in profile" :key="item.id">
+            <div v-if="!isEditing" class="border border-black p-4 mt-4 rounded-md w-100">
                 <label for="uname" class="block font-semibold">Username:</label>
                 <div id="uname" name="uname" class="w-full border rounded-md p-2 mb-2 bg-gray-100 text-gray-700">
                     {{ item.username }}
@@ -120,10 +122,6 @@ export default {
         return {
             profile: [],
             isEditing: false,
-            // username: "API...Username",
-            // email: "API...Email",
-            // password: "",
-            // confirmPassword: "",
             isLoading: false,
             showPassword: false,
             showConfirmPassword: false,
@@ -147,15 +145,19 @@ export default {
             this.showConfirmPassword = !this.showConfirmPassword;
         },
         saveChanges() {
-            this.isLoading = true; // Set loading before the check
+            this.isLoading = true; // Show loading indicator
 
+            // Check if passwords match
             if (this.password !== this.confirmPassword) {
                 setTimeout(() => { 
-                    this.isLoading = false; // Stop loading after showing alert
+                    this.isLoading = false; // Stop loading
                     this.errorMessage = 'Password Does Not Match';
                 }, 2000);
                 return;
             }
+
+            // Clear previous errors
+            this.errorMessage = '';
 
             setTimeout(() => {
                 this.successMessage = 'Changes Saved';
@@ -167,20 +169,26 @@ export default {
 
                 this.isEditing = false; // Switch back to view mode
                 this.isLoading = false;
-            }, 2000);   
+
+                // Clear success message after 2 seconds
+                setTimeout(() => {
+                    this.successMessage = '';
+                }, 2000);
+            }, 2000);
         },
+
         fetchProfile() {
             api.get('profile/')
                 .then(response => {
+                    this.isLoading = true;
                     this.profile = response.data.map(item => ({
                         id: item.id || '-',
                         username: item.username || '-',
                         email: item.email || 'N/A',
                         password: item.password ?? 'No Result',
-
-                        
                     }));
 
+                    this.isLoading = false;
                     // this.$nextTick(() => this.initDataTable());
                 })
                 .catch(error => {

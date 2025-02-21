@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center bg-gray-100">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-      <h2 class="text-center text-2xl font-bold text-red-500">Login</h2>
+      <h2 class="text-center text-2xl font-bold text-[#FF7823]">Login</h2>
       <p class="text-center text-gray-600">We have sent an OTP to your email address. Please enter it below to verify your login.</p>
 
       <!-- Error Message -->
@@ -28,7 +28,7 @@
               <button
                 type="button"
                 @click="sendOTPEmail"
-                class="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded-r-lg border border-red-500"
+                class="px-4 py-2 text-sm font-medium text-white bg-[#FF7823] hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded-r-lg border border-red-500"
               >
                 Resend
               </button>
@@ -40,7 +40,7 @@
         <div>
           <button
             type="submit"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#FF7823] hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Verify OTP
           </button>
@@ -49,7 +49,7 @@
 
       <!-- Login with another account -->
       <div class="text-center mt-4">
-        <router-link to="/login" class="text-red-600 hover:text-red-500 font-medium">
+        <router-link to="/login" class="text-orange-600 hover:text-orange-500 font-medium">
           Login with another account
         </router-link>
       </div>

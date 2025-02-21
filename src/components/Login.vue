@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center bg-gray-100">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-      <h2 class="text-center text-2xl font-bold text-red-500">Login</h2>
+      <h2 class="text-center text-2xl font-bold text-[#FF7823]">Login</h2>
       
       <!-- Error Message -->
       <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-red-100 text-red-600 rounded-md">
@@ -39,7 +39,7 @@
               <button
                 type="button"
                 @click="togglePasswordVisibility"
-                class="absolute inset-y-0 right-0 px-4 py-2 text-sm font-medium text-red-500 focus:outline-none"
+                class="absolute inset-y-0 right-0 px-4 py-2 text-sm font-medium text-[#FF7823] focus:outline-none"
               >
                 {{ showPassword ? 'Hide' : 'Show' }}
               </button>
@@ -48,7 +48,7 @@
 
           <!-- Forgot Password Link -->
           <div class="text-right">
-            <router-link to="/forgot-password" class="text-red-600 hover:text-red-500 text-sm font-medium">
+            <router-link to="/forgot-password" class="text-[#FF7823] hover:text-red-500 text-sm font-medium">
               Forgot your password?
             </router-link>
           </div>
@@ -58,7 +58,7 @@
         <div>
           <button
             type="submit"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#FF7823] hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Log In
           </button>
@@ -68,7 +68,7 @@
       <!-- Sign Up Link -->
       <div class="text-center mt-4">
         <span class="text-gray-700">Don’t have an account? </span>
-        <router-link to="/register" class="text-red-600 hover:text-red-500 font-medium">Sign Up</router-link>
+        <router-link to="/register" class="text-[#FF7823] hover:text-red-500 font-medium">Sign Up</router-link>
       </div>
     </div>
   </div>

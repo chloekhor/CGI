@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center bg-gray-100">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-      <h2 class="text-center text-2xl font-bold text-red-500">Forgot Password</h2>
+      <h2 class="text-center text-2xl font-bold text-[#FF7823]">Forgot Password</h2>
       <p class="text-center text-gray-600">Enter your email address to receive a password reset link.</p>
 
       <form @submit.prevent="submitEmail" class="mt-8 space-y-6">
@@ -23,7 +23,7 @@
         <div>
           <button
             type="submit"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#FF7823] hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Send Reset Link
           </button>
@@ -31,7 +31,7 @@
       </form>
 
       <div class="text-center mt-4">
-        <router-link to="/login" class="text-red-600 hover:text-red-500 font-medium">Back to Login</router-link>
+        <router-link to="/login" class="text-[#FF7823] hover:text-orange-500 font-medium">Back to Login</router-link>
       </div>
     </div>
   </div>
