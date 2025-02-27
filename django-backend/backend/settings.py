@@ -38,10 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'api',
     'readApi',
     'corsheaders',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
@@ -85,10 +92,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cgi',
+        'NAME': 'CGI',
         'USER': 'root',
         'PASSWORD': 'Rar13978',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
@@ -146,25 +153,25 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-#Nigel de
-import os
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'cgi'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'your_password'),
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-
-
+# #Nigel de
+# import os
 
 # DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / "db.sqlite3",
-#    }
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('DB_NAME', 'cgi'),
+#         'USER': os.getenv('DB_USER', 'root'),
+#         'PASSWORD': os.getenv('DB_PASSWORD', 'your_password'),
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
 # }
+
+
+
+# # DATABASES = {
+# #    'default': {
+# #        'ENGINE': 'django.db.backends.sqlite3',
+# #        'NAME': BASE_DIR / "db.sqlite3",
+# #    }
+# # }

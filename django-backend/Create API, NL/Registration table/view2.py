@@ -5,7 +5,8 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User
+# from .models import User
+from model2 import User
 from .serializers import UserSerializer
 
 @api_view(['POST'])

@@ -185,7 +185,7 @@ export default {
         reader.readAsDataURL(file); 
       }
     },
-    async submitValues() {
+    submitValues() {
       this.isLoading = true;
       if (!this.selectedFile) {
         this.errorMessage = 'Please select a file first.';

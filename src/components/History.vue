@@ -3,8 +3,7 @@
         <Navbar :logo="logo" class="bg-primary text-white py-4" />
         <div class="bg-white rounded-lg shadow-md">
             <div class="border border-gray-300">
-                <!-- <h1>History</h1> -->
-                <table id="myTable" class="display">
+                <table id="historyTable" class="display">
                     <thead>
                         <tr style = "background-color: #FF7823">
                             <th></th>
@@ -110,10 +109,10 @@ export default {
 
         const initDataTable = () => {
             nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#myTable')) {
-                    $('#myTable').DataTable().destroy();
+                if ($.fn.DataTable.isDataTable('#historyTable')) {
+                    $('#historyTable').DataTable().destroy();
                 }
-                $('#myTable').DataTable({
+                $('#historyTable').DataTable({
                     stateSave: true,
                     responsive: true,
                     columnDefs: [{ width: 10, targets: 0 }],
@@ -137,7 +136,7 @@ export default {
                 });
 
                 window.addEventListener("resize", () => {
-                    $('#myTable').DataTable().columns.adjust();
+                    $('#historyTable').DataTable().columns.adjust();
                 });
             });
         };
