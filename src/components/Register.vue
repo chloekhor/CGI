@@ -101,6 +101,9 @@
 </template>
 
 <script>
+import { registerUser } from '@/api.js'; // <span style="color: red;">[NEW] 导入 registerUser API 方法</span>
+
+
 export default {
   data() {
     return {
@@ -143,7 +146,7 @@ export default {
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword;
     },
-    register() {
+    async register() {
       // 检查密码是否符合要求
       if (!this.isPasswordValid) {
         this.passwordError = true; // 设置密码错误标记
@@ -157,19 +160,38 @@ export default {
         return;
       }
 
+
+      try { // <span style="color: red;">[NEW] 调用 registerUser API 注册用户</span>
+        const response = await registerUser({ // <span style="color: red;">[NEW] 调用 API，传入用户数据</span>
+          name: this.name,        // <span style="color: red;">[NEW]</span>
+          email: this.email,      // <span style="color: red;">[NEW]</span>
+          password: this.password // <span style="color: red;">[NEW]</span>
+        });
+        console.log('Register response:', response.data); // <span style="color: red;">[NEW] 打印 API 返回数据</span>
+        // 重置错误标记和错误信息
+        this.passwordError = false;
+        this.errorMessage = '';
+        // <span style="color: red;">[NEW] 注册成功后重定向到登录页面</span>
+        this.$router.push('/');
+      } catch (error) {
+        // <span style="color: red;">[NEW] 捕获错误并显示错误信息</span>
+        this.errorMessage = error.response?.data?.error || 'Registration failed. Please try again.';
+      }
+
+
       // 处理注册逻辑
-      console.log({
-        name: this.name,
-        email: this.email,
-        password: this.password,
-      });
+      //console.log({
+        //name: this.name,
+        //email: this.email,
+        //password: this.password,
+      //});
 
       // 重置错误标记和错误信息
-      this.passwordError = false;
-      this.errorMessage = '';
+      //this.passwordError = false;
+      //this.errorMessage = '';
 
       // 验证通过后，重定向到 /
-      this.$router.push('/');
+      //this.$router.push('/');
     },
   },
 };

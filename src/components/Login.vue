@@ -80,6 +80,7 @@
 
 
 <script>
+import { loginUser } from '@/api.js';
 
 
 
@@ -96,25 +97,27 @@ export default {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword; // 切换密码显示状态
     },
-    login() {
+    async login() {
       if (!this.email || !this.password) {
         this.errorMessage = 'Please fill in all the fields.';
         return;
       }
 
-      // 模拟登录逻辑
-      console.log({
+      try {  //这边下面都是新增的
+      // 新增：调用API函数loginUser，将用户输入的数据传递给后端
+      const response = await loginUser({
         email: this.email,
-        password: this.password,
+        password: this.password
       });
-
-      // 重置错误信息
-      this.errorMessage = '';
-      
-      // 成功后重定向
+      console.log ('Login response:', response.data);  // 新增：打印后端返回的数据，方便调试
+      // 新增：登录成功后重定向到OTP验证页面
       this.$router.push('/login-otp');
-    },
+    } catch (error) {
+      // 新增：捕获错误并显示错误信息
+      this.errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+    }
   },
+},
 };
 </script>
 
@@ -122,3 +125,18 @@ export default {
 </style>
 
 
+//Timz, these is previous version before connect with backend, Just put here to refer, can delete if u think no need these anymore
+// 模拟登录逻辑
+      //console.log({  //这里说这个.有问题
+        //email: this.email,
+        //password: this.password,
+      });  //这里说这个;有问题
+
+      // 重置错误信息
+      //this.errorMessage = '';  //这里说这个.和;有问题
+      
+      // 成功后重定向
+      //this.$router.push('/login-otp');  //这里说这个.和;有问题
+    //},  //这里说这个,有问题
+  //},  //这里说这个}和,有问题
+//};//这里说这个}有问题
