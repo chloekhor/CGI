@@ -109,7 +109,7 @@
 <script>
 import Navbar from '../fragments/Navbar.vue';
 import Loader from '../fragments/loader.vue';
-import api from '@/api';
+import api from '@/api/readApi';
 
 
 export default {

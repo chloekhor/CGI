@@ -21,6 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path('readApi/', include('readApi.urls')),
     path('aiModel/', include('aiModel.urls')),
+    path('createApi/', include('createApi.urls')),
 ]
 
 if settings.DEBUG:

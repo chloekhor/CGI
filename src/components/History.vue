@@ -75,7 +75,7 @@ import { Dialog, DialogTitle, TransitionRoot } from '@headlessui/vue';
 import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import 'datatables.net';
-import api from '@/api';
+import api from '@/api/readApi';
 
 export default {
     name: 'Result',

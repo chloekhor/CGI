@@ -80,63 +80,40 @@
 
 
 <script>
-import { loginUser } from '@/api.js';
-
-
+import api from '@/api/readApi';
 
 export default {
   data() {
     return {
       email: '',
       password: '',
-      showPassword: false, // 控制密码是否显示
-      errorMessage: '', // 用于存储错误信息
+      showPassword: false, 
+      errorMessage: '', 
     };
   },
   methods: {
     togglePasswordVisibility() {
-      this.showPassword = !this.showPassword; // 切换密码显示状态
+      this.showPassword = !this.showPassword;
     },
     async login() {
-      if (!this.email || !this.password) {
-        this.errorMessage = 'Please fill in all the fields.';
-        return;
-      }
+      console.log(this.email);
+      console.log(this.password);
+      try {
+        const response = await api.post('login/', {
+          email: this.email,
+          password: this.password
+        });
 
-      try {  //这边下面都是新增的
-      // 新增：调用API函数loginUser，将用户输入的数据传递给后端
-      const response = await loginUser({
-        email: this.email,
-        password: this.password
-      });
-      console.log ('Login response:', response.data);  // 新增：打印后端返回的数据，方便调试
-      // 新增：登录成功后重定向到OTP验证页面
-      this.$router.push('/login-otp');
-    } catch (error) {
-      // 新增：捕获错误并显示错误信息
-      this.errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+        if (response.data.user_id) {
+          console.log("Login successful:", response.data);
+          // Save user session (e.g., Vuex, LocalStorage, Pinia)
+          // this.$router.push('/dashboard'); // Redirect after login
+        }
+      } catch (error) {
+        console.error("Login failed:", error.response?.data?.error || "Unknown error");
+      }
     }
-  },
-},
+
+  }
 };
 </script>
-
-<style scoped>
-</style>
-
-
-//Timz, these is previous version before connect with backend, Just put here to refer, can delete if u think no need these anymore
-// 模拟登录逻辑
-      //console.log({  //这里说这个.有问题
-        //email: this.email,
-        //password: this.password,
-      });  //这里说这个;有问题
-
-      // 重置错误信息
-      //this.errorMessage = '';  //这里说这个.和;有问题
-      
-      // 成功后重定向
-      //this.$router.push('/login-otp');  //这里说这个.和;有问题
-    //},  //这里说这个,有问题
-  //},  //这里说这个}和,有问题
-//};//这里说这个}有问题

@@ -8,7 +8,7 @@
         {{ errorMessage }}
       </div>
 
-      <form @submit.prevent="register" class="mt-8 space-y-6">
+      <form @submit.prevent="registerUser" class="mt-8 space-y-6">
         <div class="rounded-md shadow-sm space-y-4">
           <!-- Name Input -->
           <div>
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { registerUser } from '@/api.js'; // <span style="color: red;">[NEW] 导入 registerUser API 方法</span>
+import api from '@/api/createApi'; // <span style="color: red;">[NEW] 导入 registerUser API 方法</span>
 
 
 export default {
@@ -146,53 +146,27 @@ export default {
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword;
     },
-    async register() {
-      // 检查密码是否符合要求
-      if (!this.isPasswordValid) {
-        this.passwordError = true; // 设置密码错误标记
-        this.errorMessage = 'Password must meet the requirements.';
-        return;
-      }
+    async registerUser() {
+      try {
+        if (this.password !== this.confirmPassword) {
+          this.errorMessage = "Passwords do not match.";
+          return;
+        }
 
-      // 检查确认密码是否匹配
-      if (this.password !== this.confirmPassword) {
-        this.errorMessage = 'Passwords do not match!';
-        return;
-      }
-
-
-      try { // <span style="color: red;">[NEW] 调用 registerUser API 注册用户</span>
-        const response = await registerUser({ // <span style="color: red;">[NEW] 调用 API，传入用户数据</span>
-          name: this.name,        // <span style="color: red;">[NEW]</span>
-          email: this.email,      // <span style="color: red;">[NEW]</span>
-          password: this.password // <span style="color: red;">[NEW]</span>
+        const response = await api.post('/register/', {
+          name: this.name,
+          email: this.email,
+          password: this.password
         });
-        console.log('Register response:', response.data); // <span style="color: red;">[NEW] 打印 API 返回数据</span>
-        // 重置错误标记和错误信息
-        this.passwordError = false;
-        this.errorMessage = '';
-        // <span style="color: red;">[NEW] 注册成功后重定向到登录页面</span>
-        this.$router.push('/');
+
+        console.log("User registered:", response.data);
+        alert("Registration successful!");
       } catch (error) {
-        // <span style="color: red;">[NEW] 捕获错误并显示错误信息</span>
-        this.errorMessage = error.response?.data?.error || 'Registration failed. Please try again.';
+        console.error("Registration error:", error.response?.data || error.message);
+        this.errorMessage = error.response?.data?.error || "An error occurred";
       }
+    }
 
-
-      // 处理注册逻辑
-      //console.log({
-        //name: this.name,
-        //email: this.email,
-        //password: this.password,
-      //});
-
-      // 重置错误标记和错误信息
-      //this.passwordError = false;
-      //this.errorMessage = '';
-
-      // 验证通过后，重定向到 /
-      //this.$router.push('/');
-    },
   },
 };
 </script>
