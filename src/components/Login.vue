@@ -3,7 +3,6 @@
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
       <h2 class="text-center text-2xl font-bold text-[#FF7823]">Login</h2>
       
-      <!-- Error Message -->
       <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-red-100 text-red-600 rounded-md">
         {{ errorMessage }}
       </div>
@@ -98,6 +97,7 @@ export default {
     async login() {
       console.log(this.email);
       console.log(this.password);
+      this.errorMessage = '';
       try {
         const response = await api.post('login/', {
           email: this.email,
@@ -110,7 +110,15 @@ export default {
           // this.$router.push('/dashboard'); // Redirect after login
         }
       } catch (error) {
-        console.error("Login failed:", error.response?.data?.error || "Unknown error");
+        if (error.response) {
+      if (error.response.status === 401 || error.response.status === 403) {
+        this.errorMessage = 'Invalid email or password.';
+      } else {
+        this.errorMessage = error.response.data?.error || 'Login failed, please try again.';
+      }
+    } else {
+      this.errorMessage = 'Network error, please try again later.';
+    }
       }
     }
 

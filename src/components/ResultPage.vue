@@ -32,7 +32,7 @@
       </div>
 
       <!-- right area -->
-      <div class="w-1/2 bg-gray-100 p-4 rounded-md">
+      <div class="w-1/2 bg-white p-4 rounded-md">
         <h2 class="text-2xl font-bold text-center mb-6">Suggestions</h2>
 
         <!-- Summary -->

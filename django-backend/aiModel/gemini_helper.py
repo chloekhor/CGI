@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 GEMINI_API_KEY = "AIzaSyC4uAMKCk72MPNQl-oo_9mhM7TrbrjqFAo"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
 def get_gemini_recommendation(evaluation_result, target_values):
     try:

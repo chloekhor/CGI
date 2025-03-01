@@ -4,10 +4,9 @@
       <h2 class="text-center text-2xl font-bold text-[#FF7823]">Register</h2>
 
       <!-- Error Message -->
-      <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-[#FF7823] text-white-600 rounded-md">
+      <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-red-100 text-red-600 rounded-md">
         {{ errorMessage }}
       </div>
-
       <form @submit.prevent="registerUser" class="mt-8 space-y-6">
         <div class="rounded-md shadow-sm space-y-4">
           <!-- Name Input -->
@@ -146,14 +145,25 @@ export default {
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword;
     },
+    
     async registerUser() {
+      this.errorMessage = '';
+      this.passwordError = false; 
+
+      if (this.password !== this.confirmPassword) {
+        this.errorMessage = "Passwords do not match.";
+        this.passwordError = true;
+        return;
+      }
+
+      if (!this.isPasswordValid) {
+        this.errorMessage = "Password must be at least 8 characters, with 1 uppercase letter, 1 lowercase letter, and 1 number.";
+        this.passwordError = true;
+        return;
+      }
+
+
       try {
-        if (this.password !== this.confirmPassword) {
-          this.errorMessage = "Passwords do not match.";
-          return;
-        }
-
-
         const response = await api.post('/register/', {
           name: this.name,
           email: this.email,
