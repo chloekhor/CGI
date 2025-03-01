@@ -1,6 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import make_password, check_password
 from users.models import Users  
 
 @csrf_exempt
@@ -14,6 +15,8 @@ def register_view(request):
             password = data.get('password')
             photo_url = data.get('photo_url', '')  # Optional
 
+            hashed_password = make_password(password)
+
             print(f"Registering user: email={email}, password={password}")
 
             # Check if email already exists
@@ -21,7 +24,7 @@ def register_view(request):
                 return JsonResponse({"error": "Email already registered"}, status=400)
 
             # Create and save user
-            user = Users(name=name, email=email, password=password, photo_url=photo_url)
+            user = Users(name=name, email=email, password=hashed_password, photo_url=photo_url)
             user.save()
 
             return JsonResponse({

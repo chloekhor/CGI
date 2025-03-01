@@ -2,7 +2,7 @@ from rest_framework import generics
 from .models import History
 from .serializers import HistorySerializer, UsersSerializer
 
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -27,6 +27,9 @@ def login_view(request):
 
             print("Received login request: email={email}, password={password}")  # Debugging
 
+            hashed_password = make_password(password)
+
+
             # Check if user exists
             user = Users.objects.filter(email=email).first()
             if not user:
@@ -36,7 +39,7 @@ def login_view(request):
             print("the userbthing", user.password)
 
             # Check password
-            if password != user.password:
+            if check_password(hashed_password, user.password):
                 print("Password incorrect")  # Debugging
                 return JsonResponse({"error": "Invalid password"}, status=401)
 

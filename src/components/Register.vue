@@ -153,6 +153,7 @@ export default {
           return;
         }
 
+
         const response = await api.post('/register/', {
           name: this.name,
           email: this.email,
