@@ -58,10 +58,9 @@
                         :type="showPassword ? 'text' : 'password'"
                         v-model="password"
                         id="password"
-                        required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2 border"
                         :class="passwordError ? 'border-red-500' : 'border-gray-300'"
-                        placeholder="••••••••"
+                        placeholder="leave it blank if no change"
                     />
                     <button
                         type="button"
@@ -85,10 +84,9 @@
                     :type="showConfirmPassword ? 'text' : 'password'"
                     v-model="confirmPassword"
                     id="confirmPassword"
-                    required
                     class="appearance-none rounded-lg relative block w-full px-3 py-2 border"
                     :class="passwordError ? 'border-red-500' : 'border-gray-300'"
-                    placeholder="••••••••"
+                    placeholder="leave it blank if no password change"
                 />
             </div>
             
@@ -126,7 +124,11 @@ export default {
             showPassword: false,
             showConfirmPassword: false,
             errorMessage: '',
-            successMessage: ''
+            successMessage: '',
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
         };
     },
 
@@ -136,6 +138,13 @@ export default {
 
     methods: {
         toggleEdit() {
+            if (this.profile.length > 0) {
+                const currentUser = this.profile[0]; 
+                this.username = currentUser.username || '';
+                this.email = currentUser.email || '';
+                this.password = '';
+                this.confirmPassword = '';
+            }
             this.isEditing = !this.isEditing;
         },
         togglePasswordVisibility() {
@@ -154,13 +163,25 @@ export default {
             }
 
             // Check if passwords match
-            if (this.password !== this.confirmPassword) {
-                setTimeout(() => { 
-                    this.isLoading = false; // Stop loading
-                    this.errorMessage = 'Password Does Not Match';
-                }, 2000);
-                return;
+            if (this.password || this.confirmPassword) {
+                if (this.password !== this.confirmPassword) {
+                    this.isLoading = false;
+                    this.errorMessage = 'Password does not match.';
+                    return;
+                }
+
+                const passwordLengthValid = this.password.length >= 8;
+                const hasUppercase = /[A-Z]/.test(this.password);
+                const hasLowercase = /[a-z]/.test(this.password);
+                const hasDigit = /\d/.test(this.password);
+
+                if (!(passwordLengthValid && hasUppercase && hasLowercase && hasDigit)) {
+                    this.isLoading = false;
+                    this.errorMessage = 'Password must be at least 8 characters long and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.';
+                    return;
+                }
             }
+
 
             const updateData = {
                 user_id: user_id,
