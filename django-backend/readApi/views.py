@@ -87,3 +87,35 @@ def get_user_session(request):
         return JsonResponse({"error": "No active session"}, status=401)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+
+@csrf_exempt
+def update_profile_view(request):
+    if request.method != 'POST':
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    try:
+        data = json.loads(request.body)
+
+        user_id = data.get('user_id')
+        name = data.get('name')
+        email = data.get('email')
+        password = data.get('password')
+
+        user = Users.objects.filter(id=user_id).first()
+
+        if not user:
+            return JsonResponse({"error": "User not found"}, status=404)
+
+        user.name = name
+        user.email = email
+        if password:
+            user.password = make_password(password)
+
+        user.save()
+
+        return JsonResponse({"message": "Profile updated successfully!"})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

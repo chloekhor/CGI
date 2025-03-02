@@ -146,6 +146,12 @@ export default {
         },
         saveChanges() {
             this.isLoading = true; // Show loading indicator
+            const user_id = localStorage.getItem('user_id');
+            if (this.password !== this.confirmPassword) {
+                this.isLoading = false;
+                this.errorMessage = 'Password does not match.';
+                return;
+            }
 
             // Check if passwords match
             if (this.password !== this.confirmPassword) {
@@ -155,6 +161,34 @@ export default {
                 }, 2000);
                 return;
             }
+
+            const updateData = {
+                user_id: user_id,
+                name: this.username,
+                email: this.email,
+                password: this.password,
+            };
+
+            api.post('profile/update/', updateData)
+            .then(() => {
+                this.successMessage = 'Profile updated successfully!';
+                this.isEditing = false;
+                this.fetchProfile();
+            })
+
+            .catch(error => {
+                this.errorMessage = 'Failed to update profile.';
+
+                if (error.response) {
+                    console.error("⚠️ Server Response:", error.response.data);
+                } else {
+                    console.error("❌ Network or other error:", error.message);
+                }
+            })
+
+            .finally(() => {
+                this.isLoading = false; // 隐藏加载动画
+            });
 
             // Clear previous errors
             this.errorMessage = '';
