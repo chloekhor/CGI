@@ -102,12 +102,17 @@ export default {
         const response = await api.post('login/', {
           email: this.email,
           password: this.password
-        });
+        }, { withCredentials: true }); // Ensures session cookies are sent
 
         if (response.data.user_id) {
           console.log("Login successful:", response.data);
-          // Save user session (e.g., Vuex, LocalStorage, Pinia)
-          // this.$router.push('/dashboard'); // Redirect after login
+          
+          // Store user session (in Vuex, Pinia, or LocalStorage)
+          localStorage.setItem("user_id", response.data.user_id);
+          
+
+          // Redirect after login
+          this.$router.push('/home');
         }
       } catch (error) {
         if (error.response) {
@@ -121,6 +126,7 @@ export default {
     }
       }
     }
+
 
   }
 };

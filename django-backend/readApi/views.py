@@ -3,6 +3,7 @@ from .models import History
 from .serializers import HistorySerializer, UsersSerializer
 
 from django.contrib.auth.hashers import check_password, make_password
+from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -10,44 +11,79 @@ from users.models import Users
 
 
 class HistoryList(generics.ListAPIView):
-    queryset = History.objects.all()  # Fetch all records from the history table
     serializer_class = HistorySerializer
 
+    def get_queryset(self):
+        # print("Session Key in get_queryset:", self.request.session.session_key)
+        # print("User ID in get_queryset:", self.request.session.get("user_id"))
+
+        # print("get_queryset is being called!")  # Debugging
+        user_id = self.request.session.get("user_id")
+        # print("user_id:", user_id)  # Debugging
+
+        if user_id:
+            return History.objects.filter(user_id=user_id)  # Fetch history records for the user
+        return History.objects.none()  # Return empty queryset if no user_id
+
+
 class UsersList(generics.ListAPIView):
-    queryset = Users.objects.all()  # Fetch all records from the profile table
+    print("fuckkkk")
     serializer_class = UsersSerializer
+
+    def get_queryset(self):
+        print("get_queryset is being called!")  # Debugging
+        
+        user_id = self.request.session.get("user_id")
+        print("userifffff", user_id)  # Debugging
+
+        if user_id:
+            return Users.objects.filter(id=user_id)
+        return Users.objects.none()
+
 
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)  # Parse JSON
+            data = json.loads(request.body)
             email = data.get('email')
             password = data.get('password')
 
-            print("Received login request: email={email}, password={password}")  # Debugging
-
-            hashed_password = make_password(password)
-
-
-            # Check if user exists
             user = Users.objects.filter(email=email).first()
             if not user:
-                print("User not found")  # Debugging
                 return JsonResponse({"error": "Invalid email"}, status=401)
-            
-            print("the userbthing", user.password)
 
-            # Check password
-            if check_password(hashed_password, user.password):
-                print("Password incorrect")  # Debugging
+            if not check_password(password, user.password):
                 return JsonResponse({"error": "Invalid password"}, status=401)
 
-            print("Login successful!")  # Debugging
-            return JsonResponse({"message": "Login successful", "user_id": user.id, "email": user.email})
+            
+            request.session.create()
+            request.session["user_id"] = user.id
+            request.session.modified = True
+            request.session.save()  # 🔹 Ensure it persists
+
+            print("Stored Session Data:", request.session.items())  # Debugging
+            print("Session Key after login:", request.session.session_key)  # Debugging
+            print("User ID stored in session:", request.session.get("user_id"))  # Debugging
+
+            return JsonResponse({
+                "message": "Login successful",
+                "user_id": user.id,
+                "email": user.email
+            })
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
+
+def get_user_session(request):
+    """Check if the user is logged in by retrieving session user_id"""
+    if request.method == 'GET':
+        user_id = request.session.get("user_id", None)
+        if user_id:
+            return JsonResponse({"user_id": user_id})
+        return JsonResponse({"error": "No active session"}, status=401)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)

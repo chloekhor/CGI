@@ -47,11 +47,29 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Allow specific methods (optional)
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+
 }
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in the database
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 86400
+SESSION_COOKIE_SAMESITE = "None"  # 🔥 Required for Safari
+SESSION_COOKIE_SECURE = False  # Change to True for HTTPS
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = False
+CORS_ALLOW_CREDENTIALS = True  # 🔥 Ensures cookies are allowed
+
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080", "http://127.0.0.1:8080"

@@ -167,6 +167,8 @@ export default {
             this.isLoading = true;
             api.get('history/')
                 .then(response => {
+                    console.log("Fetched Data:", response.data);
+                    console.log("Cookies in Response:", document.cookie); // Check if sessionid is present
                     this.history = response.data.map(item => ({
                         id: item.id || 0,
                         date: item.date || '-',
@@ -180,8 +182,12 @@ export default {
                 })
                 .catch(error => {
                     console.error('Error Fetching History: ', error);
+                    this.isLoading = false;
                 });
+
         }
+
+
     }
 };
 </script>

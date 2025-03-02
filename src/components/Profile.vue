@@ -180,16 +180,18 @@ export default {
         fetchProfile() {
             api.get('profile/')
                 .then(response => {
+                    console.log("Fetched Data:", response.data);
                     this.isLoading = true;
+                    console.log("Fetched Data:", response.data);
+                    console.log("Cookies in Response:", document.cookie);
                     this.profile = response.data.map(item => ({
                         id: item.id || '-',
-                        username: item.username || '-',
+                        username: item.name || '-',
                         email: item.email || 'N/A',
                         password: item.password ?? 'No Result',
                     }));
 
                     this.isLoading = false;
-                    // this.$nextTick(() => this.initDataTable());
                 })
                 .catch(error => {
                     console.error('Error Fetching History: ', error);

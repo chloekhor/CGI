@@ -292,6 +292,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('0cyq83vhmpat15nbm64rexpvl2gov2j0','eyJ1c2VyX2lkIjoyfQ:1toQgt:KpKCsXFvJjMPcMSSy2ylc2ZzaghYYbDNhmYbzRd5YsU','2025-03-02 17:31:55.608402'),('0tloh2cgqk69cuip7319obw57jqblzwl','eyJ1c2VyX2lkIjoxfQ:1toPW3:VRQ8ipXHLtk4lDbyz8EMOmuRpe_p2EyySKjbNn7fK_I','2025-03-15 16:16:39.520673'),('12mi8cp3o9bih4tiv5fevawh0mr8rda0','eyJ1c2VyX2lkIjoyfQ:1toQYy:NXcCvvNgNNzz2a_u2qkgEVQelVsEKJQQmcGm9L7frTQ','2025-03-02 17:23:44.268094'),('1tbka3wtf661y1myzs8f60k07hff5bkx','eyJ1c2VyX2lkIjoxfQ:1toQB2:0PQJ6xGymMY_wj-Gy5OS6llRgG0MmprDOzH_1GpHX6Q','2025-03-02 16:59:00.084710'),('6gof5yuyhm8kbae4f14hnsqgbqpnqubp','eyJ1c2VyX2lkIjoxfQ:1toOiw:EtUDz2TpBzjwk9iw7gZcG7VY8xll2h-kju3EuKhUYJk','2025-03-15 15:25:54.412697'),('734n8fctfft5i02hcp4r3fpyi03gl1uj','eyJ1c2VyX2lkIjoxfQ:1toQy6:4_vh0XWjWw4kBFF9FAdUkoYk-lCK-10kdw0QPHNaufI','2025-03-02 17:49:42.195239'),('8bzp8d8aigkqjmyij1qn8tvjvvb5qmd5','eyJ1c2VyX2lkIjoxfQ:1toPQQ:QGxlf7bzO27gpH_VG37UlSC09Uivf7sGpncSW_kuUQE','2025-03-15 16:10:50.604579'),('8cytently85ye84r8gktmaxkaub1ep6b','eyJ1c2VyX2lkIjoyfQ:1toisO:lZywbSMNYhthXSGEC3ie8jcmupL7auW2Ee4wWZCrSYo','2025-03-03 12:57:00.104566'),('8j02q4wff7wdjrojl5qucktj49d0ana1','eyJ1c2VyX2lkIjoxfQ:1toiXo:KgMmntVahEfPbvIZmjGfq3QlZU00q6dlyJ2E3IAcguA','2025-03-03 12:35:44.323182'),('8oyy47lv9u9i5bsdgpv7cxpmxau6utef','eyJ1c2VyX2lkIjoxfQ:1toiTN:2edxYTjONtAB-xmhOIJS3AD82MQfLA0XcLdordmFwls','2025-03-03 12:31:09.827453'),('91as5kioa8dukw0q4hc1z018ymzo3524','eyJ1c2VyX2lkIjoxfQ:1toPzM:o81PREa7nAPIsUbGkYS14Ox7lnvqIqPIEl8-ba_s8EE','2025-03-02 16:46:56.663681'),('a05tywzpg20mqklrmq89phcnpm4d5ll2','eyJ1c2VyX2lkIjoyfQ:1toQxv:3s9bFVonluEkuZRIWNmYv9SMThvHcgJy1fbndlOIxRQ','2025-03-02 17:49:31.723270'),('ahowl8xm4lmderpsp4xys4dmupfdownv','eyJ1c2VyX2lkIjoxfQ:1toQxU:rNzxX5lu_vBRM5LbKg1s-5NpszEsz8Q4FfqQtxHcTCk','2025-03-02 17:49:04.898107'),('akehohl7fz4rz831jju54y4idoc0lo3i','eyJ1c2VyX2lkIjoxfQ:1toiQX:nGU6fdV6klNzPQ6S91zG4XI7WryLRDvSt6AjKQlvDPg','2025-03-03 12:28:13.191998'),('cpdxl6eqcqk5r7mrein0piw983rfc05q','eyJ1c2VyX2lkIjoxfQ:1toPmT:s_ZdBF0sPQwv2SQJ6KjIe2iRkruUMggSuvXM_MNEPVg','2025-03-15 16:33:37.463627'),('cwp6i1d6cj8quib243g358co9ri9rxos','eyJ1c2VyX2lkIjoyfQ:1toQ7R:Oxe18pISmBef9bhUjxow_FvWYcBvxgpSY1DIVHq8CaI','2025-03-02 16:55:17.497306'),('f8zaroys3o6wts7kydbrnukds1r40wiq','eyJ1c2VyX2lkIjoxfQ:1toQuK:gGKWRmqMfdla8enaG_zqeaQmjFBmvaufChdcWjb8lO0','2025-03-02 17:45:48.072257'),('gi0oxldeb6iih4qgyck7y9nlu5aczqma','eyJ1c2VyX2lkIjoxfQ:1toQmh:bljllB4II9Tk1OBq-p0A6Lmj1uBLTcSiPfAX_W8HpeM','2025-03-02 17:37:55.427000'),('guabchb4thmjfzunlcd211oatco1kjd4','eyJ1c2VyX2lkIjoxfQ:1toQKm:DZh0H8XxkqsgD30H_8KJAOmGN822xRBVIF_aQZnhkbU','2025-03-02 17:09:04.296554'),('gyhn69b4h1oin9wxefizzksw7hihsxjw','eyJ1c2VyX2lkIjoxfQ:1tois0:TQHN6pMIhRF6qfrwM3UwMuSGoRXhqcqbFDDrg8DmwPo','2025-03-03 12:56:36.278548'),('hbvgp16k6ej8tokh980qxsmlx977sazu','eyJ1c2VyX2lkIjoyfQ:1toQx0:CBlxm-axB7DSwefRXm10y_NPkljVq2cUCdGez5ucrUM','2025-03-02 17:48:34.792417'),('iqz9k2i3jd6ad3rs18sweishmcl5htgr','eyJ1c2VyX2lkIjoxfQ:1toPkW:W_xpHWZ6k7axet5AKQwJ27rICNAS29AYdiw4to3JVqE','2025-03-15 16:31:36.662923'),('jw4b3m59mpdqlmal5u6tzalswkg1xnsu','eyJ1c2VyX2lkIjoxfQ:1toPP8:zIoKdDH2gvbRg_qyinoKhrr1l1_x96zgJKk_3GBA6Zs','2025-03-15 16:09:30.811486'),('lq9nlj55am470b4jnnfsaydhchg6nmpb','eyJ1c2VyX2lkIjoxfQ:1toQ5x:ujaaNeaJ6Wegbj7ZqTom8_l0KucawvqoaH5fvKnMaZI','2025-03-02 16:53:45.734448'),('t67ubdgr287jspu7nvbawtilut6fib6t','eyJ1c2VyX2lkIjoyfQ:1toQSF:P0xpB8C6THQuYIVSbp2lQXo1AeSm4xoNhDpbGLMvzJ8','2025-03-02 17:16:47.210842'),('t83dlwn3ybx0r67ofja4qfkt5yj9jiv4','eyJ1c2VyX2lkIjoxfQ:1toQG6:aBZsEmoFeNNibxqs7wDQzfKVabaXQBG6nuHN1txXgsc','2025-03-02 17:04:14.302805'),('th4dvmn2ivn7v3kiv8z0qlmgrxi55qr8','eyJ1c2VyX2lkIjoxfQ:1toQwA:bpbhzCS1jzYx_hcdPRnPoe2Dl1s1e7huZPcUpHT59rc','2025-03-02 17:47:42.761775'),('ucfiln8685a0upd1h1s83kv3a6bnif4n','eyJ1c2VyX2lkIjoxfQ:1toikn:5PkncRfz84fjDsOoSHtGUViJVrQI2rsLbDowYSqQROE','2025-03-03 12:49:09.936499'),('vc4k7b8txvcj2su32f5ifzt68w77o6rh','eyJ1c2VyX2lkIjoxfQ:1toPJY:o1uuHtBkKoFGGfA5D_JUguyYqMVLWEjLOUFes8L5_WY','2025-03-15 16:03:44.406337'),('wwn9z3s7xpl67oe6fzqw73wofxc36048','eyJ1c2VyX2lkIjoyfQ:1toQUP:jrt9FWdteV9WC3yzO5ib8Yy24aJO7usj9mXdyZkBfE0','2025-03-02 17:19:01.732257'),('x4p80ieckhzvl4xy2anltoy68cdh2k1j','eyJ1c2VyX2lkIjoxfQ:1toOpd:xlEFPO8Dug7W5LgDiR5nc1CbajysxyYUpONRKuViNYg','2025-03-15 15:32:49.446678'),('ylrfy6zpoisc1le8pyfrvmocus7ue24n','eyJ1c2VyX2lkIjoxfQ:1toQsl:dUrODSSMGn8Thb-b5M27UjZDIyA6SrLDFtSxCwNyR9c','2025-03-02 17:44:11.717646');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -304,13 +305,16 @@ DROP TABLE IF EXISTS `history`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `history` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date` datetime NOT NULL,
   `target` int NOT NULL,
   `result` int NOT NULL,
   `suggestion` text,
-  `photo` longblob,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `photo` varchar(255) DEFAULT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -319,37 +323,8 @@ CREATE TABLE `history` (
 
 LOCK TABLES `history` WRITE;
 /*!40000 ALTER TABLE `history` DISABLE KEYS */;
-INSERT INTO `history` VALUES (1,'2025-02-13 09:09:22',80,85,'Continue current progress.',NULL);
+INSERT INTO `history` VALUES (11,'2024-03-01 10:00:00',5,10,'Increase dosage','photo1.jpg',1),(12,'2024-03-02 11:30:00',3,7,'Monitor for side effects','photo2.jpg',1),(13,'2024-03-03 14:45:00',8,12,'Adjust treatment plan','photo3.jpg',2),(14,'2024-03-04 09:15:00',4,6,'Routine checkup needed','photo4.jpg',2),(15,'2024-03-05 16:20:00',6,9,'Continue current regimen','photo5.jpg',2),(16,'2024-03-07 08:40:00',5,8,'Follow-up in 2 weeks','photo7.jpg',1),(17,'2024-03-08 17:30:00',9,15,'Reduce medication','photo8.jpg',2),(18,'2024-03-10 18:45:00',3,6,'Increase physical activity','photo10.jpg',1);
 /*!40000 ALTER TABLE `history` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `profile`
---
-
-DROP TABLE IF EXISTS `profile`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `profile` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `profile_picture` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `profile`
---
-
-LOCK TABLES `profile` WRITE;
-/*!40000 ALTER TABLE `profile` DISABLE KEYS */;
-INSERT INTO `profile` VALUES (1,'LemonTeii','lemonteii@example.com','hashed_password_1','C:/Users/timot/Downloads/image.png');
-/*!40000 ALTER TABLE `profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -391,7 +366,7 @@ CREATE TABLE `users` (
   `photo_url` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -400,7 +375,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Timz','Timz@gmail.com','pbkdf2_sha256$870000$UfaxwUvOR4fDbGHp4XPMNz$4pkbxSqSMo2wQbGZC2o4Zkn57G44jOpgfLLdFgEEkw8=','');
+INSERT INTO `users` VALUES (1,'Timz','Timz@gmail.com','pbkdf2_sha256$870000$UfaxwUvOR4fDbGHp4XPMNz$4pkbxSqSMo2wQbGZC2o4Zkn57G44jOpgfLLdFgEEkw8=',''),(2,'Bonz','Bonz@gmail.com','pbkdf2_sha256$870000$tNZaRiuDw6ShHwZvh2EmuJ$zyAlTyE26eJW9PKTMgaQneP1bJPC9X2D96SA4wBMUC0=','');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -413,4 +388,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-01 15:52:59
+-- Dump completed on 2025-03-02 21:03:11
