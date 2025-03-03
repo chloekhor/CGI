@@ -19,8 +19,8 @@
                         <tr v-for="item in history" :key="item.id">
                             <td><input type="checkbox" name="select"></td>
                             <td>{{ item.date || '-' }}</td>
-                            <td>{{ item.target || 'N/A' }}</td>
-                            <td>{{ item.result ?? 'No Result' }}</td>
+                            <td v-html="formatData(item.target)"></td>
+                            <td v-html="formatData(item.result)"></td>
                             <td>{{ item.suggestion ?? 'No Suggestion' }}</td>
                           
                             
@@ -43,14 +43,14 @@
             <Dialog as="div" @close="closeModal" class="fixed inset-0 z-50 flex items-center justify-center">
                 <div class="fixed inset-0 bg-black bg-opacity-30"></div>
                 
-                <div class="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-auto">
+                <div class="relative bg-white p-6 rounded-lg shadow-lg w-auto mx-auto">
                     <DialogTitle class="text-lg font-semibold">Details</DialogTitle>
                     
                     <div class="mt-4">
                         <p><strong>Date:</strong> {{ selectedItem?.date }}</p>
-                        <p><strong>Target:</strong> {{ selectedItem?.target }}</p>
+                        <p><strong>Target:</strong> {{ formatInline(selectedItem?.target) }}</p>
                         <p><strong>Suggestion:</strong> {{ selectedItem?.suggestion }}</p>
-                        <p><strong>Result:</strong> {{ selectedItem?.result }}</p>
+                        <p><strong>Result:</strong> {{ formatInline(selectedItem?.result) }}</p>
                     </div>
 
                     <div class="mt-4 flex justify-end">
@@ -167,8 +167,6 @@ export default {
             this.isLoading = true;
             api.get('history/')
                 .then(response => {
-                    console.log("Fetched Data:", response.data);
-                    console.log("Cookies in Response:", document.cookie); // Check if sessionid is present
                     this.history = response.data.map(item => ({
                         id: item.id || 0,
                         date: item.date || '-',
@@ -184,8 +182,42 @@ export default {
                     console.error('Error Fetching History: ', error);
                     this.isLoading = false;
                 });
+        },
 
+        formatData(data) {
+            if (!data) return 'N/A'; // Handles null/undefined
+
+            if (typeof data === 'object') {
+                // Convert object to "key: value" format
+                return Object.entries(data).map(([key, value]) => `${key}: ${value}`).join('<br>');
+            }
+
+            try {
+                let obj = JSON.parse(data); // Convert JSON string to an object
+                return Object.entries(obj).map(([key, value]) => `${key}: ${value}`).join('<br>');
+            } catch (e) {
+                return data.replace(/,/g, '<br>'); // If not JSON, replace commas with new lines
+            }
+        },
+
+        formatInline(data) {
+            if (!data) return 'N/A'; // Handle null/undefined
+            
+            if (typeof data === 'object') {
+                // Convert object to "key: value" format, separating with commas
+                return Object.entries(data).map(([key, value]) => `${key}: ${value}`).join(', ');
+            }
+
+            try {
+                let obj = JSON.parse(data); // Convert JSON string to an object
+                return Object.entries(obj).map(([key, value]) => `${key}: ${value}`).join(', ');
+            } catch (e) {
+                return data; // If not JSON, return as is
+            }
         }
+
+
+
 
 
     }

@@ -107,6 +107,7 @@ import elements from '../images/elements.png';
 import Navbar from '../fragments/Navbar.vue';
 import Loader from '../fragments/loader.vue';
 import axios from 'axios';
+import api from '@/api/createApi'; 
 import { Dialog, DialogTitle, TransitionRoot } from '@headlessui/vue';
 
 export default { 
@@ -219,6 +220,7 @@ export default {
         this.isLoading = true;
         const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true  // Ensures session cookies are sent
         });
 
         if (response.data.error) {
@@ -230,6 +232,25 @@ export default {
         const evaluationResult = response.data.evaluation;
         const recommendation = response.data.recommendation; 
         const photoUrl = response.data.photo_url;
+
+        console.log(evaluationResult);
+
+        const response2 = await api.post('/save/', {
+          evaluation: evaluationResult,
+          recommendation: recommendation,
+          target: this.modalValues,
+          photo_url: photoUrl
+        }, {
+          headers: { 'Content-Type': 'application/json' }, 
+          withCredentials: true 
+        });
+
+
+        if (response2.data.error) {
+          console.error("Error in 2:", response2.data.error);
+          this.isLoading = false;
+          return;
+        }
 
         this.$router.push({
           path: '/home/result-page',

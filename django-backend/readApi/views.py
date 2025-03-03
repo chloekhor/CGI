@@ -1,5 +1,4 @@
 from rest_framework import generics
-from .models import History
 from .serializers import HistorySerializer, UsersSerializer
 
 from django.contrib.auth.hashers import check_password, make_password
@@ -7,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from users.models import Users  
+from users.models import Users, History
 
 
 class HistoryList(generics.ListAPIView):
@@ -19,6 +18,7 @@ class HistoryList(generics.ListAPIView):
 
         # print("get_queryset is being called!")  # Debugging
         user_id = self.request.session.get("user_id")
+        print("what the fuck la ", user_id)
         # print("user_id:", user_id)  # Debugging
 
         if user_id:
@@ -50,17 +50,18 @@ def login_view(request):
             password = data.get('password')
 
             user = Users.objects.filter(email=email).first()
+
             if not user:
-                return JsonResponse({"error": "Invalid email"}, status=401)
+                return JsonResponse({"error": "Invalid email or password"}, status=401)
 
             if not check_password(password, user.password):
-                return JsonResponse({"error": "Invalid password"}, status=401)
+                return JsonResponse({"error": "Invalid email or password"}, status=401)
 
             
             request.session.create()
             request.session["user_id"] = user.id
             request.session.modified = True
-            request.session.save()  # 🔹 Ensure it persists
+            request.session.save()  
 
             print("Stored Session Data:", request.session.items())  # Debugging
             print("Session Key after login:", request.session.session_key)  # Debugging
@@ -119,3 +120,5 @@ def update_profile_view(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
+

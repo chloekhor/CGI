@@ -73,11 +73,6 @@
   </div>
 </template>
 
-
-
-
-
-
 <script>
 import api from '@/api/readApi';
 
@@ -106,12 +101,7 @@ export default {
 
         if (response.data.user_id) {
           console.log("Login successful:", response.data);
-          
-          // Store user session (in Vuex, Pinia, or LocalStorage)
           localStorage.setItem("user_id", response.data.user_id);
-          
-
-          // Redirect after login
           this.$router.push('/home');
         }
       } catch (error) {

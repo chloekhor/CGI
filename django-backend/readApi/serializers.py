@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import History
-from users.models import Users
+from users.models import Users, History
 
 
 class HistorySerializer(serializers.ModelSerializer):
