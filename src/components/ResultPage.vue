@@ -9,8 +9,8 @@
       <div class="w-1/2">
         <h2 class="text-2xl font-bold text-center mb-6">Evaluation Results</h2>
         <div class="matrix-wrapper">
-          <div class="axis-label top">Informative</div>
-          <div class="axis-label left">Remunerative</div>
+          <div class="axis-label top">Remunerative</div>
+          <div class="axis-label left">Informative</div>
           <div class="axis-label right">Relational</div>
           <div class="axis-label bottom">Entertainment</div>
 
@@ -93,6 +93,7 @@
       const queryRecommendation = this.$route.query.recommendation;
       const queryPhotoUrl = this.$route.query.photoUrl;
       console.log("Received photo URL:", queryPhotoUrl);
+      console.log("tiref ", queryRecommendation);
   
       if (queryResult) {
         this.evaluationResult = JSON.parse(queryResult);
@@ -100,6 +101,7 @@
       }
       if (queryTarget) {
         this.targetValues = JSON.parse(queryTarget);
+        console.log("fuck ", queryTarget);
         console.log("Received Target Values:", this.targetValues);
       }
       if (queryRecommendation) {
@@ -109,7 +111,7 @@
         if (summaryMatch) {
           this.parsedRecommendation = marked(summaryMatch[1].trim()); 
         } else {
-          this.parsedRecommendation = "No summary found.";
+          this.parsedRecommendation = queryRecommendation;
         }
       }
       if (queryPhotoUrl) {

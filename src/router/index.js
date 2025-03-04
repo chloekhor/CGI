@@ -52,6 +52,11 @@ const routes = [
     component: ResultPage
   },
   {
+    path: '/result-page',
+    name: 'resultPage',
+    component: ResultPage
+  },
+  {
     path: '/home/profile',
     name: 'Profile',
     component: Profile

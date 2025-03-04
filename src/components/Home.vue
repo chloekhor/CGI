@@ -252,6 +252,8 @@ export default {
           return;
         }
 
+        console.log('Dataasaasasa:', recommendation);
+
         this.$router.push({
           path: '/home/result-page',
           query: { 

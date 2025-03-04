@@ -24,14 +24,27 @@
                             <td>{{ item.suggestion ?? 'No Suggestion' }}</td>
                           
                             
-                            <td>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-eye text-blue-500 cursor-pointer hover:text-blue-700"
-                                    viewBox="0 0 16 16" @click="openModal(item)">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                                </svg>
+                            <td class="h-full text-center">
+                                <div class="flex justify-center items-center space-x-2 h-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                        class="lucide lucide-eye cursor-pointer hover:stroke-blue-300 transition" @click="openModal(item)">
+                                        <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                        class="lucide lucide-download cursor-pointer hover:stroke-blue-300 transition" @click="downloadReport(item)">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="7 10 12 15 17 10"/>
+                                        <line x1="12" x2="12" y1="15" y2="3"/>
+                                    </svg>
+                                </div>
                             </td>
+
+
+
                         </tr>
                     </tbody>
                 </table>
@@ -76,6 +89,9 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 import 'datatables.net';
 import api from '@/api/readApi';
+// import { generatePDFReport } from "../utils/generateReport.js";
+
+import { toRaw } from 'vue';
 
 export default {
     name: 'Result',
@@ -85,6 +101,11 @@ export default {
         return {
             history: [],
             isLoading: false,
+            evaluationResult: '',
+            target: '',
+            photo: '',
+            recommendation: ''
+
         };
     },
 
@@ -172,9 +193,11 @@ export default {
                         date: item.date || '-',
                         target: item.target || 'N/A',
                         result: item.result ?? 'No Result',
-                        suggestion: item.suggestion ?? 'No Suggestion',
+                        suggestion: item.summary ?? 'No Suggestion',
+                        fullAnalysis: item.fullAnalysis ?? 'No Analysis',
                         photo: item.photo ?? 'Error Loading Photo'
                     }));
+
                     this.isLoading = false;
                     this.$nextTick(() => this.initDataTable());
                 })
@@ -193,15 +216,15 @@ export default {
             }
 
             try {
-                let obj = JSON.parse(data); // Convert JSON string to an object
+                let obj = JSON.parse(data); 
                 return Object.entries(obj).map(([key, value]) => `${key}: ${value}`).join('<br>');
             } catch (e) {
-                return data.replace(/,/g, '<br>'); // If not JSON, replace commas with new lines
+                return data.replace(/,/g, '<br>'); 
             }
         },
 
         formatInline(data) {
-            if (!data) return 'N/A'; // Handle null/undefined
+            if (!data) return 'N/A'; 
             
             if (typeof data === 'object') {
                 // Convert object to "key: value" format, separating with commas
@@ -212,9 +235,34 @@ export default {
                 let obj = JSON.parse(data); // Convert JSON string to an object
                 return Object.entries(obj).map(([key, value]) => `${key}: ${value}`).join(', ');
             } catch (e) {
-                return data; // If not JSON, return as is
+                return data; 
             }
-        }
+        },
+
+        downloadReport(item) {
+            console.log(item);
+
+            const rawItem = toRaw(item);  // Convert Proxy to plain object
+            console.log(Object.values(rawItem)[2]);
+
+            let target = Object.values(Object.values(rawItem)[2]);  
+            let result = Object.values(rawItem)[3];
+            let recommendation = Object.values(rawItem)[5];
+            let photo_url = Object.values(rawItem)[6];  
+            
+            console.log(recommendation);
+
+            // Send the data using Vue Router's push
+            this.$router.push({
+                path: '/result-page',
+                query: { 
+                    result: JSON.stringify(result),  
+                    target: JSON.stringify(target),  
+                    recommendation: recommendation, 
+                    photoUrl: photo_url
+                }
+            });
+        },
 
 
 
@@ -231,3 +279,4 @@ export default {
     @import '../assets/homepage-style.css';
 
 </style>
+

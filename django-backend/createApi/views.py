@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
 from users.models import Users, History
+import re
+import markdown
+from bs4 import BeautifulSoup
+
 
 @csrf_exempt
 def register_view(request):
@@ -47,6 +51,10 @@ def save_analysis(request):
 
             evaluation_result = data.get('evaluation')
             recommendation = data.get('recommendation')
+            summary_1 = re.search(r"### \*\*Summary\*\*\s*([\s\S]*?)(?=\n###|$)", recommendation)     
+            summary_text = summary_1.group(1).strip()  # Extract text
+            summary_html = markdown.markdown(summary_text)   
+            summary = BeautifulSoup(summary_html, "html.parser").get_text()         
             target = data.get('target')
             photo_url = data.get('photo_url')
 
@@ -66,7 +74,8 @@ def save_analysis(request):
                 user=user,
                 target=target,
                 result=evaluation_result,
-                suggestion=recommendation,
+                fullAnalysis=recommendation,
+                summary=summary,
                 photo=photo_url
             )
 
@@ -76,3 +85,4 @@ def save_analysis(request):
             return JsonResponse({"error": "Invalid JSON data"}, status=400)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
