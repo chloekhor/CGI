@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .Prototype_v1 import evaluate_food_image  # Import your AI evaluation function
 from .gemini_helper import get_gemini_recommendation # AI generate recommendation
+from .CGI_all_in_one_v2 import main
 from django.conf import settings
 from urllib.parse import urljoin
 
@@ -31,7 +32,7 @@ def upload_photo(request):
 
             photo_url = urljoin(BASE_URL, f"{settings.MEDIA_URL}uploads/{photo.name}")
             # Call your AI model evaluation function here
-            evaluation_result = evaluate_food_image(file_path)
+            evaluation_result = main(file_path)
 
             recommendation = get_gemini_recommendation(evaluation_result, target_values)
 
