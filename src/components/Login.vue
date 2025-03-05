@@ -100,9 +100,13 @@ export default {
         }, { withCredentials: true }); // Ensures session cookies are sent
 
         if (response.data.user_id) {
-          console.log("Login successful:", response.data);
-          localStorage.setItem("user_id", response.data.user_id);
-          this.$router.push('/home');
+          console.log("Login successful, OTP sent:", response.data);
+          // localStorage.setItem("user_id", response.data.user_id);
+
+          this.$router.push({
+                    path: '/login-otp',
+                    query: { email: this.email }  // 把用户 email 传给 OTP 页面
+                });
         }
       } catch (error) {
         if (error.response) {

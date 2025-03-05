@@ -58,37 +58,54 @@
 </template>
 
 <script>
+import api from '@/api/readApi'; // ✅ 确保引入 API 交互模块
 export default {
   data() {
     return {
       otp: '',
-      generatedOTP: '', // 保存生成的 OTP
-      errorMessage: '', // 用于存储错误信息
+      errorMessage: '',
+      isResendDisabled: false, // ✅ 1分钟内不能点击
+      email: ''
     };
   },
+  created() {
+    this.email = this.$route.query.email || ''; // ✅ 确保 email 存在
+  },
   methods: {
-    sendOTPEmail() {
-      // 生成随机的6位数OTP并展示给用户（模拟通过电子邮件发送）
-      this.generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
-      alert('OTP sent to your email: ' + this.generatedOTP); // 模拟显示发送的OTP
-    },
-    submitOTP() {
-      // 验证用户输入的OTP是否与发送的OTP匹配
-      if (this.otp === this.generatedOTP) {
-        this.errorMessage = ''; // 验证通过，清除错误信息
-        alert('OTP Verified. Login successful!');
-        this.$router.push('/home'); // 跳转到首页
-      } else {
-        this.errorMessage = 'Invalid OTP. Please try again.'; // OTP 错误，设置错误信息
+    async sendOTPEmail() {
+      if (this.isResendDisabled) return;
+
+      this.isResendDisabled = true; // ✅ 防止用户短时间内重复点击
+      setTimeout(() => {
+        this.isResendDisabled = false;
+      }, 60000); // 60秒后解除按钮限制
+
+      try {
+        const response = await api.post('resend-otp/', { email: this.email });
+        console.log("OTP resent successfully:", response.data);
+      } catch (error) {
+        console.error("Error resending OTP:", error);
+        this.errorMessage = "Failed to resend OTP. Try again later.";
       }
     },
-  },
-  mounted() {
-    // 在页面加载时发送OTP
-    this.sendOTPEmail();
-  },
+    async submitOTP() {
+      try {
+        const response = await api.post('verify-otp/', {
+          email: this.email,
+          otp: this.otp
+        });
+
+        console.log("OTP verified, access granted:", response.data);
+        // ✅ 这里假设服务器返回一个 access_token，存入 localStorage
+        localStorage.setItem("access_token", response.data.access_token);
+        // ✅ OTP 正确，跳转到首页
+        this.$router.push('/home');
+
+} catch (error) {
+console.error("OTP verification failed:", error);
+this.errorMessage = "Invalid OTP or too many attempts.";
+}
+}
+}
 };
 </script>
-
-<style scoped>
-</style>
