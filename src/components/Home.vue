@@ -28,11 +28,26 @@
         <div class="flex flex-row gap-6 items-center">
           <img :src="elements" alt="Locked" class="w-auto h-auto max-w-[300px] max-h-[300px] sm:max-w-[350px] sm:max-h-[350px] object-contain">
 
+          <!-- slider -->
           <div class="flex flex-col w-full">
-            <div v-for="(value, index) in 4" :key="index" class="mb-10">
-              <label :for="'slider' + (index + 1)" class="block mb-1">
-                Value: <span :id="'value' + (index + 1)">{{ sliders[index] }}</span>
-              </label>
+            <div v-for="(label, index) in sliderLabels" :key="index" class="mb-10">
+              <div class="flex items-center space-x-2">
+                <label :for="'slider' + (index + 1)" class="block">
+                  {{ label }}: <span :id="'value' + (index + 1)">{{ sliders[index] }}</span>
+                </label>
+
+                <!-- help tooltip -->
+                <div class="relative flex items-center">
+                  <span  class="ml-2 cursor-pointer relative" @mouseenter="showTooltip = index" @mouseleave="showTooltip = null" >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-help stroke-gray-500"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+
+                    <div v-if="showTooltip === index" class="absolute left-1/2 -top-10 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50 shadow-lg">
+                      {{ tooltips[index] }}
+                    </div>
+                  </span>
+                </div>
+              </div>
+
               <input
                 type="range"
                 :id="'slider' + (index + 1)"
@@ -45,8 +60,10 @@
                 }"
                 @input="updateSliderValue(index + 1, $event)"
               >
+
             </div>
           </div>
+
         </div>
 
       </div>
@@ -127,7 +144,25 @@ export default {
       fileLabel: 'Please Enter your image',  
       validExtensions: ['jpg', 'jpeg', 'png'], 
       imagePreview: null,
-      sliders: [0, 0, 0, 0],
+      sliderLabels: {
+        informational: 'Informational Value',
+        relational: 'Relational Value',
+        entertainment: 'Entertainment Value',
+        remunerative: 'Remunerative Value'
+      },
+      sliders: {
+        informational: 0,
+        relational: 0,
+        entertainment: 0,
+        remunerative: 0
+      },
+      tooltips: {
+        informational: 'The poster contains product information, descriptions, or details about the product or service.',
+        relational: 'The poster highlights relationships, such as friends, family, gatherings, or social interactions.',
+        entertainment: 'The poster includes entertaining elements, such as exaggerated facial expressions, humor, or playful visuals.',
+        remunerative: 'The poster emphasizes offers, promotions, discounts, or other financial incentives.'
+      },
+    showTooltip: null,
       isLoading: false,
       errorMessage: '',
       selectedFile: null,
