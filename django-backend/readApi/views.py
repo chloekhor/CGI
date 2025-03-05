@@ -27,13 +27,8 @@ class HistoryList(generics.ListAPIView):
     serializer_class = HistorySerializer
 
     def get_queryset(self):
-        # print("Session Key in get_queryset:", self.request.session.session_key)
-        # print("User ID in get_queryset:", self.request.session.get("user_id"))
-
-        # print("get_queryset is being called!")  # Debugging
         user_id = self.request.session.get("user_id")
-        print("what the fuck la ", user_id)
-        # print("user_id:", user_id)  # Debugging
+        print("user_id:", user_id)  # Debugging
 
         if user_id:
             return History.objects.filter(user_id=user_id)  # Fetch history records for the user
@@ -41,14 +36,12 @@ class HistoryList(generics.ListAPIView):
 
 
 class UsersList(generics.ListAPIView):
-    print("fuckkkk")
     serializer_class = UsersSerializer
 
     def get_queryset(self):
-        print("get_queryset is being called!")  # Debugging
-        
+        print("get_queryset is being called!") 
         user_id = self.request.session.get("user_id")
-        print("userifffff", user_id)  # Debugging
+        print("user id ", user_id)  # Debugging
 
         if user_id:
             return Users.objects.filter(id=user_id)

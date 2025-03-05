@@ -50,11 +50,13 @@ def save_analysis(request):
             print("Received Data:", data)
 
             evaluation_result = data.get('evaluation')
+            
             recommendation = data.get('recommendation')
             summary_1 = re.search(r"### \*\*Summary\*\*\s*([\s\S]*?)(?=\n###|$)", recommendation)     
             summary_text = summary_1.group(1).strip()  # Extract text
             summary_html = markdown.markdown(summary_text)   
             summary = BeautifulSoup(summary_html, "html.parser").get_text()         
+            
             target = data.get('target')
             photo_url = data.get('photo_url')
 

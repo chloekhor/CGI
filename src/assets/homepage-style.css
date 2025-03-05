@@ -34,7 +34,6 @@ body {
 
 .set-target {
     display: flex;
-    justify-content: center;
     font-size: 30px;
 }
 

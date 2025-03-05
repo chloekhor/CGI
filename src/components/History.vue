@@ -1,50 +1,47 @@
 <template>
     <div class="container mx-auto p-6">
         <Navbar :logo="logo" class="bg-primary text-white py-4" />
-        <div class="bg-white rounded-lg shadow-md">
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="border border-gray-300">
-                <table id="historyTable" class="display">
+                <table id="historyTable" class="display w-full">
                     <thead>
-                        <tr style = "background-color: #FF7823">
+                        <tr style="background-color: #FF7823">
                             <th></th>
                             <th>Date</th>
                             <th>Target</th>
                             <th>Result</th>
                             <th>Suggestion</th>
-                       
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in history" :key="item.id">
+                        <tr v-for="item in history" :key="item.id" class="h-full">
                             <td><input type="checkbox" name="select"></td>
                             <td>{{ item.date || '-' }}</td>
                             <td v-html="formatData(item.target)"></td>
                             <td v-html="formatData(item.result)"></td>
                             <td>{{ item.suggestion ?? 'No Suggestion' }}</td>
-                          
-                            
                             <td class="h-full text-center">
                                 <div class="flex justify-center items-center space-x-2 h-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                        class="lucide lucide-eye cursor-pointer hover:stroke-blue-300 transition" @click="openModal(item)">
+                                        class="lucide lucide-eye cursor-pointer hover:stroke-blue-300 transition" 
+                                        @click="openModal(item)">
                                         <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
                                         <circle cx="12" cy="12" r="3"/>
                                     </svg>
                                     
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                        class="lucide lucide-download cursor-pointer hover:stroke-blue-300 transition" @click="downloadReport(item)">
+                                        class="lucide lucide-download cursor-pointer hover:stroke-blue-300 transition" 
+                                        @click="downloadReport(item)">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                         <polyline points="7 10 12 15 17 10"/>
                                         <line x1="12" x2="12" y1="15" y2="3"/>
                                     </svg>
                                 </div>
                             </td>
-
-
-
                         </tr>
                     </tbody>
                 </table>
@@ -53,12 +50,12 @@
 
         <!-- Modal -->
         <TransitionRoot appear :show="isModalOpen" as="template">
-            <Dialog as="div" @close="closeModal" class="fixed inset-0 z-50 flex items-center justify-center">
+            <Dialog as="div" @close="closeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
                 <div class="fixed inset-0 bg-black bg-opacity-30"></div>
-                
-                <div class="relative bg-white p-6 rounded-lg shadow-lg w-auto mx-auto">
+
+                <div class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-lg sm:max-w-xl md:max-w-2xl mx-auto">
                     <DialogTitle class="text-lg font-semibold">Details</DialogTitle>
-                    
+
                     <div class="mt-4">
                         <p><strong>Date:</strong> {{ selectedItem?.date }}</p>
                         <p><strong>Target:</strong> {{ formatInline(selectedItem?.target) }}</p>
@@ -75,8 +72,8 @@
             </Dialog>
         </TransitionRoot>
     </div>
-    <Loader :isLoading="isLoading" />
 
+    <Loader :isLoading="isLoading" />
 </template>
 
 <script>
@@ -133,13 +130,16 @@ export default {
                 if ($.fn.DataTable.isDataTable('#historyTable')) {
                     $('#historyTable').DataTable().destroy();
                 }
+
+                let dynamicScrollY = `${window.innerHeight * 0.7}px`;
+
                 $('#historyTable').DataTable({
                     stateSave: true,
                     responsive: true,
                     columnDefs: [{ width: 10, targets: 0 }],
                     pagingType: 'full_numbers',
                     autoWidth: false,
-                    scrollY: '300px',
+                    scrollY: dynamicScrollY,
                     scrollCollapse: true,
                     pageLength: 5,
                     lengthMenu: [
@@ -155,12 +155,17 @@ export default {
                         }
                     }
                 });
-
+                // Adjust scrollY dynamically when resizing
                 window.addEventListener("resize", () => {
-                    $('#historyTable').DataTable().columns.adjust();
+                    let newScrollY = `${window.innerHeight * 0.7}px`;
+                    let table = $('#historyTable').DataTable();
+                    table.settings()[0].oScroll.sY = newScrollY;
+                    table.columns.adjust().draw();
                 });
             });
         };
+
+
 
         onMounted(() => {
             if (dataTable) {
