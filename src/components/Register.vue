@@ -97,13 +97,33 @@
       </div>
     </div>
   </div>
+  <TransitionRoot appear :show="isModalOpen" as="template">
+  <Dialog as="div" static @close="closeModal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="fixed inset-0 bg-black bg-opacity-30"></div>
+    <div class="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-auto">
+      <div class="mt-4 text-center text-lg font-semibold text-gray-700">
+        <p>Registration successful!</p>  
+      </div>
+
+      <div class="mt-4 flex justify-end">
+      </div>
+    </div>
+  </Dialog>
+</TransitionRoot>
+
+
 </template>
 
 <script>
-import api from '@/api/createApi'; // <span style="color: red;">[NEW] 导入 registerUser API 方法</span>
+import api from '@/api/createApi';
+import { Dialog, TransitionRoot } from '@headlessui/vue';
 
 
 export default {
+  components: {
+    Dialog,
+    TransitionRoot
+  },
   data() {
     return {
       name: '',
@@ -112,8 +132,9 @@ export default {
       confirmPassword: '',
       showPassword: false,
       showConfirmPassword: false,
-      passwordError: false, // 控制是否显示错误状态
-      errorMessage: '', // 用于存储错误信息
+      passwordError: false,
+      errorMessage: '',
+      isModalOpen: false,  // Add isModalOpen to control modal visibility
     };
   },
   computed: {
@@ -145,7 +166,7 @@ export default {
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword;
     },
-    
+
     async registerUser() {
       this.errorMessage = '';
       this.passwordError = false; 
@@ -162,7 +183,6 @@ export default {
         return;
       }
 
-
       try {
         const response = await api.post('/register/', {
           name: this.name,
@@ -171,13 +191,28 @@ export default {
         });
 
         console.log("User registered:", response.data);
-        alert("Registration successful!");
+        this.isModalOpen = true;
+
+        // Wait for 2 seconds before redirecting to login
+        setTimeout(() => {
+          this.goToLogin();
+        }, 2000);
+
       } catch (error) {
         console.error("Registration error:", error.response?.data || error.message);
         this.errorMessage = error.response?.data?.error || "An error occurred";
       }
-    }
 
+    },
+    goToLogin() {
+      this.closeModal(); 
+      this.$router.push({ path: '/login' }); 
+
+    },
+
+    closeModal() {
+      this.isModalOpen = false;
+    },
   },
 };
 </script>

@@ -13,9 +13,12 @@
               id="email"
               type="email"
               required
-              class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
+              :class="emailError ? 'border-red-500' : 'border-gray-300'"
+              class="appearance-none rounded-lg relative block w-full px-3 py-2 border placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
               placeholder="you@example.com"
+              @input="validateEmail"
             />
+            <p v-if="emailError" class="text-red-500 text-sm mt-1">Invalid email format</p>
           </div>
         </div>
 
@@ -41,7 +44,8 @@
 export default {
   data() {
     return {
-      email: '',
+      email: "",
+      emailError: false
     };
   },
   methods: {
@@ -50,6 +54,10 @@ export default {
       console.log('Password reset link sent to:', this.email);
       // 可以在这里加入请求，发送到API处理找回密码
     },
+    validateEmail() {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      this.emailError = !emailPattern.test(this.email);
+    }
   },
 };
 </script>
