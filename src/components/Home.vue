@@ -30,7 +30,7 @@
 
           <!-- slider -->
           <div class="flex flex-col w-full">
-            <div v-for="(label, index) in sliderLabels" :key="index" class="mb-10">
+            <div v-for="(label, index) in Object.values(sliderLabels)" :key="index" class="mb-10">
               <div class="flex items-center space-x-2">
                 <label :for="'slider' + (index + 1)" class="block">
                   {{ label }}: <span :id="'value' + (index + 1)">{{ sliders[index] }}</span>
@@ -38,8 +38,12 @@
 
                 <!-- help tooltip -->
                 <div class="relative flex items-center">
-                  <span  class="ml-2 cursor-pointer relative" @mouseenter="showTooltip = index" @mouseleave="showTooltip = null" >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-help stroke-gray-500"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="ml-2 cursor-pointer relative" @mouseenter="showTooltip = index" @mouseleave="showTooltip = null">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-help stroke-gray-500">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                      <path d="M12 17h.01"/>
+                    </svg>
 
                     <div v-if="showTooltip === index" class="absolute left-1/2 -top-10 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50 shadow-lg">
                       {{ tooltips[index] }}
@@ -53,6 +57,7 @@
                 :id="'slider' + (index + 1)"
                 min="0"
                 max="10"
+                step="1"
                 v-model.number="sliders[index]"
                 class="w-full custom-slider"
                 :style="{
@@ -63,6 +68,8 @@
 
             </div>
           </div>
+
+
 
         </div>
 
@@ -98,9 +105,9 @@
           <DialogTitle class="text-lg font-semibold">Please Ensure Targetted Result and Image are Correct Before Analysis Begins</DialogTitle>
           <div class="mt-4">
             <p><strong>Informational:</strong> {{ modalValues.informational }}</p>
-            <p><strong>Remunerative:</strong> {{ modalValues.remunerative }}</p>
             <p><strong>Relational:</strong> {{ modalValues.relational }}</p>
             <p><strong>Entertainment:</strong> {{ modalValues.entertainment }}</p>
+            <p><strong>Remunerative:</strong> {{ modalValues.remunerative }}</p>
           </div>
           <div class="mt-4 flex justify-end space-x-2">
             <button 
@@ -150,19 +157,14 @@ export default {
         entertainment: 'Entertainment Value',
         remunerative: 'Remunerative Value'
       },
-      sliders: {
-        informational: 0,
-        relational: 0,
-        entertainment: 0,
-        remunerative: 0
-      },
+      sliders: [0, 0, 0, 0], // This is still an array
       tooltips: {
         informational: 'The poster contains product information, descriptions, or details about the product or service.',
         relational: 'The poster highlights relationships, such as friends, family, gatherings, or social interactions.',
         entertainment: 'The poster includes entertaining elements, such as exaggerated facial expressions, humor, or playful visuals.',
         remunerative: 'The poster emphasizes offers, promotions, discounts, or other financial incentives.'
       },
-    showTooltip: null,
+      showTooltip: null,
       isLoading: false,
       errorMessage: '',
       selectedFile: null,
@@ -172,9 +174,11 @@ export default {
         relational: '',
         entertainment: '',
         informational: ''
-      },
+      }
     };
   },
+
+
 
   methods: {
     updateSliderValue(index, event) {
