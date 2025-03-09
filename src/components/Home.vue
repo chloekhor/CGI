@@ -13,7 +13,7 @@
         <p class="bg-orange-500 text-white font-bold py-4 px-6 text-xl sm:text-2xl md:text-3xl rounded-xl hover:bg-orange-600 w-full text-center max-w-[600px]">
           Upload Your CGI Poster Here
           <br/>
-          <span class="text-sm sm:text-base">Format: JPEG, PNG; Size: 5MB or less</span>
+          <span class="text-sm sm:text-base">Format: JPG, JPEG, PNG; Size: 5MB or less</span>
         </p>
       </label>
       <input class="hidden" id="picture" name="picture" type="file" @change="validateFileFormat">
@@ -38,18 +38,23 @@
 
                 <!-- help tooltip -->
                 <div class="relative flex items-center">
-                  <span class="ml-2 cursor-pointer relative" @mouseenter="showTooltip = index" @mouseleave="showTooltip = null">
+                  <span class="ml-2 cursor-pointer relative"
+                        @mouseenter="showTooltip = index"
+                        @mouseleave="showTooltip = null">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-help stroke-gray-500">
                       <circle cx="12" cy="12" r="10"/>
                       <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
                       <path d="M12 17h.01"/>
                     </svg>
 
-                    <div v-if="showTooltip === index" class="absolute left-1/2 -top-10 -translate-x-1/2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50 shadow-lg">
+                    <!-- Tooltip positioned above -->
+                    <div v-if="showTooltip === index"
+                        class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 bg-black text-white text-xs py-1 px-2 rounded whitespace-nowrap z-50 shadow-lg">
                       {{ tooltips[index] }}
                     </div>
                   </span>
                 </div>
+
               </div>
 
               <input
@@ -157,23 +162,24 @@ export default {
         entertainment: 'Entertainment Value',
         remunerative: 'Remunerative Value'
       },
-      sliders: [0, 0, 0, 0], // This is still an array
-      tooltips: {
-        informational: 'The poster contains product information, descriptions, or details about the product or service.',
-        relational: 'The poster highlights relationships, such as friends, family, gatherings, or social interactions.',
-        entertainment: 'The poster includes entertaining elements, such as exaggerated facial expressions, humor, or playful visuals.',
-        remunerative: 'The poster emphasizes offers, promotions, discounts, or other financial incentives.'
-      },
       showTooltip: null,
+      sliders: [0, 0, 0, 0], // This is still an array
+      tooltips: [
+        'The poster contains product information, descriptions, or details about the product or service.',
+        'The poster highlights relationships, such as friends, family, gatherings, or social interactions.',
+        'The poster includes entertaining elements, such as exaggerated facial expressions, humor, or playful visuals.',
+        'The poster emphasizes offers, promotions, discounts, or other financial incentives.'
+      ],
+
       isLoading: false,
       errorMessage: '',
       selectedFile: null,
       isModalOpen: false,
       modalValues: {
-        remunerative: '',
+        informational: '',
         relational: '',
         entertainment: '',
-        informational: ''
+        remunerative: ''
       }
     };
   },
@@ -237,10 +243,10 @@ export default {
 
       // Set the modalValues based on the current slider values
       this.modalValues = {
-        remunerative: this.sliders[0],
+        informational: this.sliders[0],
         relational: this.sliders[1],
         entertainment: this.sliders[2],
-        informational: this.sliders[3]
+        remunerative: this.sliders[3]
       };
 
       this.isModalOpen = true;
