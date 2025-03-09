@@ -18,7 +18,7 @@
                     <tbody>
                         <tr v-for="item in history" :key="item.id" class="h-full">
                             <td><input type="checkbox" name="select"></td>
-                            <td>{{ item.date || '-' }}</td>
+                            <td>{{ dateFormat(item.date) || '-' }}</td>
                             <td v-html="formatData(item.target)"></td>
                             <td v-html="formatData(item.result)"></td>
                             <td>{{ item.suggestion ?? 'No Suggestion' }}</td>
@@ -57,9 +57,9 @@
                     <DialogTitle class="text-lg font-semibold">Details</DialogTitle>
 
                     <div class="mt-4">
-                        <p><strong>Date:</strong> {{ selectedItem?.date }}</p>
-                        <p><strong>Target:</strong> {{ formatInline(selectedItem?.target) }}</p>
-                        <p><strong>Suggestion:</strong> {{ selectedItem?.suggestion }}</p>
+                        <p><strong>Date:</strong> {{ dateFormat(selectedItem?.date) }}</p><br>
+                        <p><strong>Target:</strong> {{ formatInline(selectedItem?.target) }}</p><br>
+                        <p><strong>Suggestion:</strong> {{ selectedItem?.suggestion }}</p><br>
                         <p><strong>Result:</strong> {{ formatInline(selectedItem?.result) }}</p>
                     </div>
 
@@ -242,6 +242,12 @@ export default {
             } catch (e) {
                 return data; 
             }
+        },
+
+        dateFormat() {
+            let timestamp = "2025-03-04T03:10:14Z";
+            return timestamp.replace("T", " ").replace("Z", "");
+
         },
 
         downloadReport(item) {

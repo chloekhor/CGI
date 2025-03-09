@@ -10,10 +10,15 @@
             {{ successMessage }}
         </div>
 
-        <div v-if="!isEditing">
-            <div id="pfp"></div>
-            <div style = "text-align: center" v-for="item in profile" :key="item.id">{{ item.username }}</div>
+        <div v-if="!isEditing" class="w-full border rounded-lg p-4 bg-gray-100 text-gray-700 shadow-md">
+            <div class="text-center">
+                <p class="text-sm text-gray-500">Logged in as</p>
+                <div v-for="item in profile" :key="item.id" class="text-lg font-semibold text-gray-900">
+                    {{ item.username }}
+                </div>
+            </div>
         </div>
+
 
 
         <!-- Show Current Data -->
@@ -45,10 +50,10 @@
         <!-- Edit Profile -->
         <form v-if="isEditing" @submit.prevent="saveChanges" class="border border-black p-4 mt-4 rounded-md w-100">
             <label for="uname" class="block font-semibold">Username:</label>
-            <input v-model="username" type="text" id="uname" name="uname" class="w-full border rounded-md p-2 mt-1 mb-3">
+            <input v-model="username" type="text" id="uname" name="uname" class="w-full border rounded-md p-2 mt-1 mb-3" :class="passwordError ? 'border-red-500' : 'border-gray-300'">
 
             <label for="email" class="block font-semibold">Email:</label>
-            <input v-model="email" type="text" id="email" name="email" class="w-full border rounded-md p-2 mt-1 mb-3">
+            <input v-model="email" type="text" id="email" name="email" class="w-full border rounded-md p-2 mt-1 mb-3" :class="passwordError ? 'border-red-500' : 'border-gray-300'">
 
             <!-- Password -->
             <div>
@@ -129,6 +134,7 @@ export default {
             email: '',
             password: '',
             confirmPassword: '',
+            passwordError: false,
         };
     },
 
@@ -155,18 +161,39 @@ export default {
         },
         saveChanges() {
             this.isLoading = true; // Show loading indicator
+            this.errorMessage = ''; // Clear previous errors
             const user_id = localStorage.getItem('user_id');
-            if (this.password !== this.confirmPassword) {
+
+            // Validate name and email
+            if (!this.username.trim()) {
                 this.isLoading = false;
-                this.errorMessage = 'Password does not match.';
+                this.errorMessage = 'Name cannot be empty.';
+                this.passwordError = true;
                 return;
             }
 
-            // Check if passwords match
-            if (this.password || this.confirmPassword) {
+            if (!this.email.trim()) {
+                this.isLoading = false;
+                this.errorMessage = 'Email cannot be empty.';
+                this.passwordError = true;
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.email)) {
+                this.isLoading = false;
+                this.errorMessage = 'Invalid email format.';
+                this.passwordError = true;
+
+                return;
+            }
+
+            // Validate passwords (if provided)
+            if (this.password) {
                 if (this.password !== this.confirmPassword) {
                     this.isLoading = false;
                     this.errorMessage = 'Password does not match.';
+                    this.passwordError = true;
                     return;
                 }
 
@@ -182,38 +209,35 @@ export default {
                 }
             }
 
-
+            // Prepare data for update
             const updateData = {
                 user_id: user_id,
                 name: this.username,
                 email: this.email,
-                password: this.password,
+                password: this.password || undefined, // Avoid sending empty password
             };
 
+            // Send request to update profile
             api.post('profile/update/', updateData)
-            .then(() => {
-                this.successMessage = 'Profile updated successfully!';
-                this.isEditing = false;
-                this.fetchProfile();
-            })
+                .then(() => {
+                    this.successMessage = 'Profile updated successfully!';
+                    this.isEditing = false;
+                    this.fetchProfile();
+                })
+                .catch(error => {
+                    this.errorMessage = 'Failed to update profile.';
 
-            .catch(error => {
-                this.errorMessage = 'Failed to update profile.';
+                    if (error.response) {
+                        console.error("⚠️ Server Response:", error.response.data);
+                    } else {
+                        console.error("❌ Network or other error:", error.message);
+                    }
+                })
+                .finally(() => {
+                    this.isLoading = false;
+                });
 
-                if (error.response) {
-                    console.error("⚠️ Server Response:", error.response.data);
-                } else {
-                    console.error("❌ Network or other error:", error.message);
-                }
-            })
-
-            .finally(() => {
-                this.isLoading = false; // 隐藏加载动画
-            });
-
-            // Clear previous errors
-            this.errorMessage = '';
-
+            // Show success message for 2 seconds
             setTimeout(() => {
                 this.successMessage = 'Changes Saved';
                 console.log("Saving changes:", {
@@ -222,10 +246,9 @@ export default {
                     password: this.password,
                 });
 
-                this.isEditing = false; // Switch back to view mode
+                this.isEditing = false;
                 this.isLoading = false;
 
-                // Clear success message after 2 seconds
                 setTimeout(() => {
                     this.successMessage = '';
                 }, 2000);
