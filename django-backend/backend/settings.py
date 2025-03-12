@@ -59,7 +59,24 @@ REST_FRAMEWORK = {
     ),
 
 }
-SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in the database
+
+# 使用 Redis 作为缓存后端，用于存储 Session
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # 注意：这里使用 Redis 的数据库 1（你可以根据需要调整）
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+
+#SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in the database, Nigel remove, because we change to store in Redis, more secure
+# 让 Django 使用缓存（即 Redis）来存储 Session
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
 SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 86400
@@ -68,6 +85,16 @@ SESSION_COOKIE_SECURE = False  # Change to True for HTTPS
 CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = False
 CORS_ALLOW_CREDENTIALS = True  # 🔥 Ensures cookies are allowed
+
+
+# 设置 Session 有效期为 12 小时（12*3600 = 43200 秒）
+SESSION_COOKIE_AGE = 43200
+
+# 每次请求时自动刷新 Session 的过期时间（用户活跃则不会过期）
+SESSION_SAVE_EVERY_REQUEST = True
+
+# 浏览器关闭后 Session 不立即失效（即保持登录状态）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 
@@ -188,11 +215,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     }
 # }
 
-
-
-# # DATABASES = {
-# #    'default': {
-# #        'ENGINE': 'django.db.backends.sqlite3',
-# #        'NAME': BASE_DIR / "db.sqlite3",
-# #    }
-# # }
