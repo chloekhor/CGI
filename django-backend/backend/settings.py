@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework',
     'rest_framework_simplejwt',
     'api',
@@ -73,20 +74,26 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+# 强制使用 HTTPS
+SECURE_SSL_REDIRECT = True
+CSRF_TRUSTED_ORIGINS = ['https://localhost']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
 
 #SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in the database, Nigel remove, because we change to store in Redis, more secure
 # 让 Django 使用缓存（即 Redis）来存储 Session
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = True  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 86400
 SESSION_COOKIE_SAMESITE = "None"  # 🔥 Required for Safari
-SESSION_COOKIE_SECURE = False  # Change to True for HTTPS
+SESSION_COOKIE_SECURE = True  # Change to True for HTTPS
 CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = False
 CORS_ALLOW_CREDENTIALS = True  # 🔥 Ensures cookies are allowed
 
 
