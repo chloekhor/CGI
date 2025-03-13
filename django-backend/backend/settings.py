@@ -63,13 +63,16 @@ REST_FRAMEWORK = {
 # 使用 Redis 作为缓存后端，用于存储 Session
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",  # 注意：这里使用 Redis 的数据库 1（你可以根据需要调整）
+        "BACKEND": "django_redis.cache.RedisCache",  # Correct backend for django-redis
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Redis database 1
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
 }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 
 #SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Store sessions in the database, Nigel remove, because we change to store in Redis, more secure
@@ -114,6 +117,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'timothytan010517@gmail.com'
+EMAIL_HOST_PASSWORD = 'jugu sxlm qjrr asdl'  # Replace this with the App Password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
 
 TEMPLATES = [
     {

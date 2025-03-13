@@ -71,57 +71,53 @@
       </div>
     </div>
   </div>
+  <Loader :isLoading="isLoading" />
 </template>
 
 <script>
 import api from '@/api/readApi';
+import Loader from '../fragments/loader.vue';
 
 export default {
+  components: { Loader },
   data() {
     return {
       email: '',
       password: '',
       showPassword: false, 
       errorMessage: '', 
+      isLoading: false,
     };
   },
+
   methods: {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
     async login() {
-      console.log(this.email);
-      console.log(this.password);
       this.errorMessage = '';
+      this.isLoading = true;
       try {
-        const response = await api.post('login/', {
-          email: this.email,
-          password: this.password
-        }, { withCredentials: true }); // Ensures session cookies are sent
+        const response = await api.post('login/', { email: this.email, password: this.password }, { withCredentials: true });
 
-        if (response.data.user_id) {
+        if (response.data?.user_id) {
           console.log("Login successful, OTP sent:", response.data);
-          // localStorage.setItem("user_id", response.data.user_id);
-
-          this.$router.push({
-                    path: '/login-otp',
-                    query: { email: this.email }  // 把用户 email 传给 OTP 页面
-                });
+          this.$router.push({ path: '/login-otp', query: { email: this.email } });
+        } else {
+          this.errorMessage = 'Unexpected response, please try again.';
         }
       } catch (error) {
         if (error.response) {
-      if (error.response.status === 401 || error.response.status === 403) {
-        this.errorMessage = 'Invalid email or password.';
-      } else {
-        this.errorMessage = error.response.data?.error || 'Login failed, please try again.';
+          this.errorMessage = error.response.status === 401 || error.response.status === 403
+            ? 'Invalid email or password.'
+            : error.response.data?.error || 'Login failed, please try again.';
+        } else {
+          this.errorMessage = 'Network error, please try again later.';
+        }
+      } finally {
+        this.isLoading = false; // Ensure loading state resets
       }
-    } else {
-      this.errorMessage = 'Network error, please try again later.';
     }
-      }
-    }
-
-
   }
 };
 </script>

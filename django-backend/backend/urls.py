@@ -17,14 +17,14 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
-# from .views import login_view, verify_otp
+from readApi.views import login_view, verify_otp
 
 urlpatterns = [
     path('readApi/', include('readApi.urls')),
     path('aiModel/', include('aiModel.urls')),
     path('createApi/', include('createApi.urls')),
-    # path('api/login/', login_view, name='login'),
-    # path('api/verify-otp/', verify_otp, name='verify_otp'),
+    path('api/login/', login_view, name='login'),
+    path('api/verify-otp/', verify_otp, name='verify_otp'),
 ]
 
 if settings.DEBUG:

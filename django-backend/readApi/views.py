@@ -66,6 +66,7 @@ def login_view(request):
 
             # ✅ 生成 6 位数随机 OTP
             otp = str(random.randint(100000, 999999))
+            print(f"Generated OTP for {email}: {otp}")
 
             # ✅ 连接 Redis 并存储 OTP，设置 10 分钟过期
             r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
@@ -75,13 +76,19 @@ def login_view(request):
             send_mail(
                 'IECGIM Verification Code',
                 f'Hi, your verification code is: {otp}. This code is valid for 10 minutes.',
-                'IECGIM@outlook.com',
+                'playstationtesting255@gmail.com',
                 [email],
                 fail_silently=False,
             )
 
             # ✅ 记录日志
             logger.info(f"Sent OTP to {email}: {otp}")
+
+            request.session["user_id"] = user.id
+
+            print("garrrrr ", request.session["user_id"])
+            request.session["email"] = user.email
+            request.session.modified = True  # Ensure session is updated
 
             return JsonResponse({
                 "message": "OTP sent to your email",
@@ -138,7 +145,7 @@ def update_profile_view(request):
         return JsonResponse({"error": str(e)}, status=500)
     
 
-
+@csrf_exempt
 def verify_otp(request):
     if request.method == 'POST':
         try:
@@ -158,6 +165,7 @@ def verify_otp(request):
 
             # ✅ 4️⃣ 获取存储的 OTP
             otp_stored = r.get(f"otp:{email}")
+            print(f"Stored OTP: {otp_stored}, Received OTP: {otp}")
 
 
             if not otp_stored:
