@@ -122,13 +122,12 @@ def update_profile_view(request):
     try:
         data = json.loads(request.body)
 
-        user_id = data.get('user_id')
+        user_id = request.session.get("user_id")
         name = data.get('name')
         email = data.get('email')
         password = data.get('password')
 
         user = Users.objects.filter(id=user_id).first()
-
         if not user:
             return JsonResponse({"error": "User not found"}, status=404)
 
@@ -143,7 +142,6 @@ def update_profile_view(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-    
 
 @csrf_exempt
 def verify_otp(request):
