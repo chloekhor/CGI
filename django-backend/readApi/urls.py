@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/profile/update/', update_profile_view, name='profile-update'),
     path('api/login/', login_view, name='login'),
     path('api/verify-otp/', verify_otp, name='verify_otp'),
+    path('api/upload/', upload_file, name='upload_file'),
 ]
 
 if settings.DEBUG:

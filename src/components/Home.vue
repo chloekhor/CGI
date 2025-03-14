@@ -265,7 +265,7 @@ export default {
 
       try {
         this.isLoading = true;
-        const response = await axios.post('http://localhost:8000/aiModel/api/upload/', formData, {
+        const response = await axios.post('https://localhost:8000/aiModel/api/upload/', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
           withCredentials: true  // Ensures session cookies are sent
         });

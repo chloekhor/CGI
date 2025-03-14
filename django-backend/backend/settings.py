@@ -77,7 +77,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 # 强制使用 HTTPS
 SECURE_SSL_REDIRECT = True
-CSRF_TRUSTED_ORIGINS = ['https://localhost']
+CSRF_TRUSTED_ORIGINS = ["https://localhost", "https://127.0.0.1"]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
@@ -96,6 +96,9 @@ SESSION_COOKIE_SAMESITE = "None"  # 🔥 Required for Safari
 SESSION_COOKIE_SECURE = True  # Change to True for HTTPS
 CSRF_COOKIE_SAMESITE = "None"
 CORS_ALLOW_CREDENTIALS = True  # 🔥 Ensures cookies are allowed
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost:8080", "https://127.0.0.1:8080",  # Vue.js 的 HTTPS 地址
+]
 
 
 # 设置 Session 有效期为 12 小时（12*3600 = 43200 秒）
@@ -110,7 +113,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:8081", "http://127.0.0.1:8081"
+    "https://localhost:8080", "https://127.0.0.1:8080"
 ]
 
 MIDDLEWARE = [
@@ -122,6 +125,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -222,18 +226,4 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# #Nigel de
-# import os
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.getenv('DB_NAME', 'cgi'),
-#         'USER': os.getenv('DB_USER', 'root'),
-#         'PASSWORD': os.getenv('DB_PASSWORD', 'your_password'),
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
 

@@ -144,6 +144,20 @@ def update_profile_view(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
+
+
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST' and request.FILES.get('photo'):
+        uploaded_file = request.FILES['photo']
+        file_path = "uploads/" + uploaded_file.name
+        default_storage.save(file_path, ContentFile(uploaded_file.read()))
+        return JsonResponse({"message": "File uploaded successfully", "path": file_path})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
+
 @csrf_exempt
 def verify_otp(request):
     if request.method == 'POST':
