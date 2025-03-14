@@ -115,8 +115,8 @@
         }
       }
       if (queryPhotoUrl) {
-        if (!queryPhotoUrl.startsWith("http")) {
-          this.photoUrl = "http://localhost:8000" + queryPhotoUrl;
+        if (!queryPhotoUrl.startsWith("https")) {
+          this.photoUrl = "https://localhost:8000" + queryPhotoUrl;
         } else {
           this.photoUrl = queryPhotoUrl;
         }

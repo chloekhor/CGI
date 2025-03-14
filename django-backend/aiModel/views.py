@@ -15,7 +15,7 @@ from django.core.files.base import ContentFile
 import json
 import os
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "https://localhost:8000"
 
 
 
