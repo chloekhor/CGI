@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'createApi',
     'users',
     'corsheaders',
+    'sslserver'
 ]
 
 
@@ -109,7 +110,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080", "http://127.0.0.1:8080"
+    "http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:8081", "http://127.0.0.1:8081"
 ]
 
 MIDDLEWARE = [

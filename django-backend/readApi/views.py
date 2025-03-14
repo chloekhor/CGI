@@ -85,10 +85,11 @@ def login_view(request):
             logger.info(f"Sent OTP to {email}: {otp}")
 
             request.session["user_id"] = user.id
-
-            print("garrrrr ", request.session["user_id"])
             request.session["email"] = user.email
             request.session.modified = True  # Ensure session is updated
+
+            print(f"User testing ID: {user.id}")
+
 
             return JsonResponse({
                 "message": "OTP sent to your email",

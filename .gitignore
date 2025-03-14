@@ -39,3 +39,5 @@ env/
 *.sqlite3
 db.sqlite3
 migrations/
+django-backend/cert.pem
+django-backend/key.pem
