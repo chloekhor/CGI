@@ -3,6 +3,13 @@
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
       <h2 class="text-center text-2xl font-bold text-[#FF7823]">Reset Password</h2>
 
+
+      <!-- 【新增】：成功提示消息 -->
+      <div v-if="message" class="text-center py-2 px-4 text-sm font-medium bg-green-100 text-green-600 rounded-md">
+        {{ message }}
+      </div>
+
+
       <!-- Error Message -->
       <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-red-100 text-red-600 rounded-md">
         {{ errorMessage }}
@@ -69,6 +76,9 @@
 </template>
 
 <script>
+
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -78,8 +88,19 @@ export default {
       showConfirmPassword: false,
       passwordError: false, // 控制是否显示错误状态
       errorMessage: '', // 用于存储错误信息
+
+      message: '', // 【新增】：存储成功提示信息
+      token: '' // 【新增】：存储 URL 中的 token
+
     };
   },
+
+  mounted() {
+    // 【新增】：从 URL 中获取 token 参数
+    const urlParams = new URLSearchParams(window.location.search);
+    this.token = urlParams.get('token');
+  },
+
   computed: {
     passwordLengthValid() {
       return this.newPassword.length >= 8;
@@ -120,17 +141,39 @@ export default {
         return;
       }
 
+      // 【新增】：使用 axios 发送 POST 请求到后端 reset_password API
+      axios.post('https://localhost:8000/api/reset-password/', {
+        token: this.token,
+        new_password: this.newPassword,
+        confirm_password: this.confirmNewPassword
+      })
+      .then(response => {
+        this.message = response.data.message || "Password reset successfully.";
+        this.errorMessage = '';
+        // 【修改】：重置成功后重定向到登录页面（或首页，根据需要调整）
+        this.$router.push('/login');
+      })
+      .catch(error => {
+        if (error.response && error.response.data && error.response.data.error) {
+          this.errorMessage = error.response.data.error;
+        } else {
+          this.errorMessage = "An error occurred while resetting the password.";
+        }
+        this.message = '';
+      });
+
+
       // 模拟提交新密码的逻辑
       console.log({
         newPassword: this.newPassword,
       });
 
       // 重置错误标记和错误信息
-      this.passwordError = false;
-      this.errorMessage = '';
+      //this.passwordError = false;
+      //this.errorMessage = '';
 
       // 模拟成功重置后重定向到首页
-      this.$router.push('/');
+      //this.$router.push('/');
     },
   },
 };

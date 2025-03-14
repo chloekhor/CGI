@@ -19,12 +19,17 @@ from django.conf.urls.static import static
 from django.urls import include, path
 from readApi.views import login_view, verify_otp
 
+from api.views import forgot_password, reset_password  # 新增导入
+
 urlpatterns = [
     path('readApi/', include('readApi.urls')),
     path('aiModel/', include('aiModel.urls')),
     path('createApi/', include('createApi.urls')),
     path('api/login/', login_view, name='login'),
     path('api/verify-otp/', verify_otp, name='verify_otp'),
+    # 新增密码重置相关端点
+    path('api/forgot-password/', forgot_password, name='forgot_password'),
+    path('api/reset-password/', reset_password, name='reset_password'),
 ]
 
 if settings.DEBUG:

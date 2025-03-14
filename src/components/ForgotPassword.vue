@@ -1,6 +1,10 @@
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center bg-gray-100">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+      <!-- 【新增】成功提示消息 -->
+      <div v-if="message" class="text-center py-2 px-4 text-sm font-medium bg-green-100 text-green-600 rounded-md">
+        {{ message }}
+      </div>
       <div v-if="errorMessage" class="text-center py-2 px-4 text-sm font-medium bg-red-100 text-red-600 rounded-md">
         {{ errorMessage }}
       </div>
@@ -44,12 +48,17 @@
 </template>
 
 <script>
+
+// 【新增】：导入 axios，用于发送 HTTP 请求
+import axios from 'axios';
+
 export default {
   data() {
     return {
       email: '',
       passwordError: false, // Controls if error is displayed
       errorMessage: '', // Stores error message
+      message: '' // 【新增】：存储成功提示信息
     };
   },
   methods: {
@@ -70,6 +79,25 @@ export default {
       if (this.passwordError) {
         return; 
       }
+
+    // 【新增】：使用 axios 发送 POST 请求到后端 forgot_password API
+    axios.post('https://localhost:8000/api/forgot-password/', { email: this.email })
+        .then(response => {
+          // 【修改】：显示后端返回的成功消息
+          this.message = response.data.message || "Reset email sent. Please check your inbox.";
+          this.errorMessage = '';
+        })
+        .catch(error => {
+          // 【修改】：处理并显示错误信息
+          if (error.response && error.response.data && error.response.data.error) {
+            this.errorMessage = error.response.data.error;
+          } else {
+            this.errorMessage = "An error occurred while sending the reset link.";
+          }
+          this.message = '';
+        });
+
+
 
       console.log('Password reset link sent to:', this.email);
     },

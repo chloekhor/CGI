@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 import uuid  
 
 class Users(models.Model):
@@ -6,6 +7,9 @@ class Users(models.Model):
     email = models.CharField(unique=True, max_length=255)
     password = models.CharField(max_length=255)
     photo_url = models.CharField(max_length=512, blank=True, null=True)  
+
+    reset_token = models.CharField(max_length=255, blank=True, null=True)
+    reset_token_expiry = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = 'users'
