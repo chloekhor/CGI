@@ -19,17 +19,13 @@ BASE_URL = "https://localhost:8000"
 
 
 
-
-
-
-
-
-
 @csrf_exempt
 def upload_photo(request):
+    print("testerrrrrr")
     if request.method == 'POST':
-        if 'photo' in request.FILES:
+        if 'photo' not in request.FILES:
             return JsonResponse({'error': 'No file uploaded'}, status=400)
+
 
 
         photo = request.FILES['photo']
@@ -40,7 +36,7 @@ def upload_photo(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON in target values'}, status=400)
                 
-            # Save the file temporarily
+        # Save the file temporarily
         upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
         os.makedirs(upload_dir, exist_ok=True)
         file_path = os.path.join(upload_dir, photo.name)

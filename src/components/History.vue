@@ -3,7 +3,7 @@
         <Navbar :logo="logo" class="bg-primary text-white py-4" />
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            <div class="border border-gray-300">
+            <div class="border border-gray-300 overflow-x-auto">
                 <table id="historyTable" class="display w-full">
                     <thead>
                         <tr style="background-color: #FF7823">
