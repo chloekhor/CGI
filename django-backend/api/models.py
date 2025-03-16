@@ -12,9 +12,12 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        # 确保密码是哈希存储的
+        # Make sure password is store after Hashed
         if not self.password_hash.startswith('pbkdf2_sha256$'):
             self.password_hash = make_password(self.password_hash)
+            #pbkdf2_sha256 is using PBKDF2 + SHA256 hashing method to hashing
+            #default 600'000 times of hashing
+            #Django default random generate 16byte salt, and +salt before hashing
         super().save(*args, **kwargs)
 
     def __str__(self):

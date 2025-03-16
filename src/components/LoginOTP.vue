@@ -81,7 +81,9 @@ export default {
       }, 60000); // 60秒后解除按钮限制
 
       try {
-        const response = await api.post('resend-otp/', { email: this.email });
+          const response = await axios.post('https://localhost:8000/api/resend-otp/', {
+            email: this.email
+      });
         console.log("OTP resent successfully:", response.data);
       } catch (error) {
         console.error("Error resending OTP:", error);

@@ -30,6 +30,7 @@ urlpatterns = [
     # 新增密码重置相关端点
     path('api/forgot-password/', forgot_password, name='forgot_password'),
     path('api/reset-password/', reset_password, name='reset_password'),
+    path('api/resend-otp/', resend_otp, name='resend_otp'),
 ]
 
 if settings.DEBUG:

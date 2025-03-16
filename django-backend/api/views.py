@@ -99,3 +99,41 @@ def reset_password(request):
             return JsonResponse({"error": str(e)}, status=500)
     else:
         return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+@csrf_exempt
+def resend_otp(request):
+    """重新发送 OTP 到用户邮箱"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+
+            if not email:
+                return JsonResponse({"error": "Email is required"}, status=400)
+
+            try:
+                user = Users.objects.get(email=email)
+            except Users.DoesNotExist:
+                return JsonResponse({"error": "No user found with that email"}, status=404)
+
+            # 生成新的 OTP（6 位随机数字）
+            otp_code = str(uuid.uuid4().int)[:6]  # 生成 6 位 OTP
+            user.otp_code = otp_code
+            user.otp_expiry = timezone.now() + timedelta(minutes=10)  # OTP 10 分钟有效
+            user.save()
+
+            # 发送 OTP 邮件
+            send_mail(
+                'Your New OTP Code',
+                f'Your new OTP code is: {otp_code}\nThis code is valid for 10 minutes.',
+                'timothytan010517@gmail.com', 
+                [email],
+                fail_silently=False,
+            )
+
+            return JsonResponse({"message": "New OTP has been sent to your email."})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=405)
