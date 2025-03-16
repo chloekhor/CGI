@@ -14,7 +14,7 @@ from users.models import Users
 
 import redis  
 
-redis_client = redis.StrictRedis(host='localhost', port=8081, db=0, decode_responses=True)
+redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -121,12 +121,38 @@ def resend_otp(request):
             except Users.DoesNotExist:
                 return JsonResponse({"error": "No user found with that email"}, status=404)
 
-            # 生成新的 OTP（6 位随机数字）
-            otp_code = str(uuid.uuid4().int)[:6]  # 生成 6 位 OTP
+            
+            # ✅ Redis Key 设置
+            otp_key = f"otp:{email}"  # 存储 OTP
+            otp_attempt_key = f"otp_attempts:{email}"  # 记录 OTP 请求次数
+            otp_lock_key = f"otp_lock:{email}"  # 锁定用户的 key
 
+
+            # ✅ 检查用户是否被锁定（如果 key 存在，表示被锁定）
+            if redis_client.exists(otp_lock_key):
+                return JsonResponse({"error": "Too many attempts. Try again later."}, status=429)
+            
+
+            # ✅ 获取用户 OTP 尝试次数
+            attempts = redis_client.get(otp_attempt_key)
+            if attempts is None:
+                attempts = 0
+            else:
+                attempts = int(attempts)
+
+            # ✅ 超过 5 次后，锁定 1 小时
+            if attempts >= 5:
+                redis_client.setex(otp_lock_key, 3600, "LOCKED")  # 1 小时锁定
+                return JsonResponse({"error": "Too many attempts. Try again in 1 hour."}, status=429)
+
+            
             # ✅ 存入 Redis，设置 10 分钟过期
-            redis_key = f"otp:{email}"  
-            redis_client.setex(redis_key, 600, otp_code)
+            redis_client.setex(otp_key, 600, otp_code)
+
+            # ✅ 递增 OTP 尝试次数（过期时间 1 小时）
+            redis_client.incr(otp_attempt_key)
+            redis_client.expire(otp_attempt_key, 3600)  # 1 小时后重置尝试次数
+
 
             # 发送 OTP 邮件
             send_mail(
