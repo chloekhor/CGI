@@ -12,6 +12,10 @@ from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from users.models import Users
 
+import redis  
+
+redis_client = redis.StrictRedis(host='localhost', port=8081, db=0, decode_responses=True)
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     # serializer_class = UserSerializer
@@ -45,11 +49,11 @@ def forgot_password(request):
             # 构造重置密码链接（前端页面会处理 token 参数）
             reset_link = f"https://localhost:8080/reset-password?token={reset_token}"
             
-            # 发送邮件（注意 sender 需与 settings.py 中配置匹配）
+            
             send_mail(
                 'Password Reset Request',
                 f'Click the following link to reset your password: {reset_link}\nThis link is valid for 1 hour.',
-                'timothytan010517@gmail.com',  # 使用你在 settings.py 中配置的发送邮箱
+                'timothytan010517@gmail.com',  # Use personal email for now
                 [email],
                 fail_silently=False,
             )
@@ -119,9 +123,10 @@ def resend_otp(request):
 
             # 生成新的 OTP（6 位随机数字）
             otp_code = str(uuid.uuid4().int)[:6]  # 生成 6 位 OTP
-            user.otp_code = otp_code
-            user.otp_expiry = timezone.now() + timedelta(minutes=10)  # OTP 10 分钟有效
-            user.save()
+
+            # ✅ 存入 Redis，设置 10 分钟过期
+            redis_key = f"otp:{email}"  
+            redis_client.setex(redis_key, 600, otp_code)
 
             # 发送 OTP 邮件
             send_mail(
